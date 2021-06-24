@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "531483970539",
+    "project_id": "sikobeh-cbc9e",
+    "storage_bucket": "sikobeh-cbc9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531483970539:android:110d430821126d634627ae",
+        "android_client_info": {
+          "package_name": "com.example.sikobeh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "531483970539-3ev0gvjafc1enijh9d6rm4jus7g9ku5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB817eKjMU9CPNsIaKEFwVO-V3d6gVKouM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "531483970539-3ev0gvjafc1enijh9d6rm4jus7g9ku5n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
