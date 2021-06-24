@@ -83,7 +83,7 @@
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="#0ED689"
+        android:backgroundTint="@color/purple_500"
         android:text="Registrasi Userr"
         android:textColor="#FFF"
         android:textSize="26sp"
