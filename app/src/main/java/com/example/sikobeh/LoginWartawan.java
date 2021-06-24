@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ public class LoginWartawan extends AppCompatActivity {
     private TextView forgotpassword;
     private EditText email, password;
     private Button loginb;
+    private CheckBox lPassword;
 
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -36,6 +40,7 @@ public class LoginWartawan extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password);
         loginb = (Button)findViewById(R.id.loginb);
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        lPassword = (CheckBox) findViewById(R.id.lihatPassword);
         mAuth = FirebaseAuth.getInstance();
         forgotpassword = (TextView)findViewById(R.id.forgotpassword);
 
@@ -43,6 +48,18 @@ public class LoginWartawan extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 reset();
+            }
+        });
+
+        lPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(lPassword.isChecked()){
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+                else {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
             }
         });
 
