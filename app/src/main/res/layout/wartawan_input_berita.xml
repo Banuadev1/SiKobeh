@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".WartawanInputB">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tambah Laporan Berita"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                />
+
+            <EditText
+                android:id="@+id/add_judul"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_centerHorizontal="true"
+                android:hint="Judul Berita"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="100dp"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_desc"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/add_judul"
+                android:inputType="textMultiLine"
+                android:hint="Deskripsi Berita"
+                android:layout_marginBottom="15dp"
+                android:textColor="#000"/>
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_loc"
+                android:layout_below="@id/add_desc"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:inputType="textMultiLine"
+                android:hint="Lokasi Peliputan"
+                android:layout_marginBottom="15dp"
+                android:textColor="#000"/>
+
+            <ImageView
+                android:id="@+id/inputGambar"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:background="@mipmap/ic_launcher"
+                android:layout_marginTop="290dp"
+                android:layout_marginLeft="105dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/add_submit"
+                android:layout_below="@id/inputGambar"
+                android:layout_centerHorizontal="true"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:text="Tambah Ke Laporan"
+                android:layout_marginTop="15dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_back"
+                android:textAllCaps="false"
+                android:layout_below="@id/add_submit"
+                android:layout_centerHorizontal="true"
+                android:textSize="15sp"
+                android:text="Kembali"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</androidx.appcompat.widget.LinearLayoutCompat>
