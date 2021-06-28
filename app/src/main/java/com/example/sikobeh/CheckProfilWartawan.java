@@ -80,7 +80,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
                 final EditText resetPassword = new EditText(v.getContext());
 
                 final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password?");
+                passwordResetDialog.setTitle("Ubah Password?");
                 passwordResetDialog.setMessage("Masukkan Password Baru > Minimal 6 Karakter!!");
                 passwordResetDialog.setView(resetPassword);
 
@@ -92,12 +92,12 @@ public class CheckProfilWartawan extends AppCompatActivity {
                         user.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(CheckProfilWartawan.this, "Password Berhasil Di Reset", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CheckProfilWartawan.this, "Password Berhasil Di Ubah", Toast.LENGTH_SHORT).show();
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
+                        }).addOnFailureListener(new OnFailureListener () {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(CheckProfilWartawan.this, "Gagal Mereset Password", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CheckProfilWartawan.this, "Gagal Merubah Password", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
