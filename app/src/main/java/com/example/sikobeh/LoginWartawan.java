@@ -1,8 +1,5 @@
 package com.example.sikobeh;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -16,9 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -36,41 +32,28 @@ public class LoginWartawan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_wartawan);
-        email = (EditText)findViewById(R.id.email);
-        password = (EditText)findViewById(R.id.password);
-        loginb = (Button)findViewById(R.id.loginb);
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
-        lPassword = (CheckBox) findViewById(R.id.lihatPassword);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        loginb = findViewById(R.id.loginb);
+        progressBar = findViewById(R.id.progressbar);
+        lPassword = findViewById(R.id.lihatPassword);
         mAuth = FirebaseAuth.getInstance();
-        forgotpassword = (TextView)findViewById(R.id.forgotpassword);
+        forgotpassword = findViewById(R.id.forgotpassword);
 
-        forgotpassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reset();
+        forgotpassword.setOnClickListener(v -> reset());
+
+        lPassword.setOnClickListener(v -> {
+            if(lPassword.isChecked()){
+                password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            }
+            else {
+                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
 
-        lPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(lPassword.isChecked()){
-                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                }
-                else {
-                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-            }
-        });
-
-        loginb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.loginb:
-                        UserLogin();
-                        break;
-                }
+        loginb.setOnClickListener(v -> {
+            if (v.getId() == R.id.loginb) {
+                UserLogin();
             }
         });
     }
@@ -113,19 +96,16 @@ public class LoginWartawan extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user.isEmailVerified()){
-                        openafterLogin();
-                        progressBar.setVisibility(View.GONE);
-                    }
-                    else {
-                        user.sendEmailVerification();
-                        Toast.makeText(LoginWartawan.this, "Periksa Email anda untuk verifikasi!!", Toast.LENGTH_LONG).show();
-                    }
+        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user.isEmailVerified()){
+                    openafterLogin();
+                    progressBar.setVisibility(View.GONE);
+                }
+                else {
+                    user.sendEmailVerification();
+                    Toast.makeText(LoginWartawan.this, "Periksa Email anda untuk verifikasi!!", Toast.LENGTH_LONG).show();
                 }
             }
         });

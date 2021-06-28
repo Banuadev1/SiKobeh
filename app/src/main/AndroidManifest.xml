@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sikobeh">
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -12,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SiKobeh">
-        <activity android:name=".LoginWartawan"></activity>
+        <activity android:name=".CheckProfilWartawan"></activity>
+        <activity android:name=".LoginWartawan" />
         <activity android:name=".LoginKoordinator" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".WartawanForm" />

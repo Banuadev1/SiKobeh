@@ -6,13 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".WartawanForm">
 
-    <Button
+    <include layout="@layout/toolbar_form_wartawan"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="75dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/bukaFLaporan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="600dp"
-        android:layout_marginLeft="120dp"
+        android:backgroundTint="@color/design_default_color_primary"
+        android:clickable="true"
+        android:textAllCaps="false"
+        android:rotation="90"
+        android:textColor="@color/white"
+        android:layout_marginEnd="-73dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
         android:text="Tambah Laporan"
-        />
+        app:icon="@drawable/laporan"
+        app:iconTint="@color/white"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-54dp" />
 
 </RelativeLayout>

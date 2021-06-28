@@ -19,10 +19,10 @@ public class LoginKoordinator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_koordinator);
-        loginb = (Button)findViewById(R.id.loginb);
-        email = (EditText)findViewById(R.id.email);
-        password = (EditText)findViewById(R.id.password);
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        loginb = findViewById(R.id.loginb);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        progressBar = findViewById(R.id.progressbar);
 
         loginb.setOnClickListener(new View.OnClickListener() {
             @Override
