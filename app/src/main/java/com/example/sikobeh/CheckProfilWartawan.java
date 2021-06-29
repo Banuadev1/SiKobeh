@@ -1,21 +1,17 @@
 package com.example.sikobeh;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class CheckProfilWartawan extends AppCompatActivity {
 
@@ -57,6 +54,9 @@ public class CheckProfilWartawan extends AppCompatActivity {
         userId = fAuth.getCurrentUser().getUid();
         user = fAuth.getCurrentUser();
 
+        StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
+
         reff = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataWartawan");
         reff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,65 +76,50 @@ public class CheckProfilWartawan extends AppCompatActivity {
             }
         });
 
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        logOut.setOnClickListener(v -> {
 
-            }
         });
 
-        changeProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), UpdateDataWartawan.class));
-            }
+        changeProfileImage.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), UpdateDataWartawan.class));
+            finish();
         });
 
-        resetPassLocal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText resetPassword = new EditText(v.getContext());
+        resetPassLocal.setOnClickListener(v -> {
+            final EditText resetPassword = new EditText(v.getContext());
 
-                final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Ubah Password?");
-                passwordResetDialog.setMessage("Masukkan Password Baru > Minimal 6 Karakter!!");
-                passwordResetDialog.setView(resetPassword);
+            final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
+            passwordResetDialog.setTitle("Ubah Password?");
+            passwordResetDialog.setMessage("Masukkan Password Baru > Minimal 6 Karakter!!");
+            passwordResetDialog.setView(resetPassword);
 
-                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // extract the email and send reset link
-                        String newPassword = resetPassword.getText().toString();
-                        user.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(CheckProfilWartawan.this, "Password Berhasil Di Ubah", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener () {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(CheckProfilWartawan.this, "Gagal Merubah Password", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
+            passwordResetDialog.setPositiveButton("Yes", (dialog, which) -> {
+                // extract the email and send reset link
+                String newPassword = resetPassword.getText().toString();
+                user.updatePassword(newPassword).addOnSuccessListener(aVoid -> Toast.makeText(CheckProfilWartawan.this, "Password Berhasil Di Ubah", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(CheckProfilWartawan.this, "Gagal Merubah Password", Toast.LENGTH_SHORT).show());
+            });
 
-                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // close
-                    }
-                });
-                passwordResetDialog.create().show();
-            }
+            passwordResetDialog.setNegativeButton("No", (dialog, which) -> {
+                // close
+            });
+            passwordResetDialog.create().show();
         });
 
-    }
+        logOut.setOnClickListener(v -> {
+            AlertDialog.Builder logoutAkun = new AlertDialog.Builder(v.getContext());
+            logoutAkun.setTitle("LogOut Akun");
+            logoutAkun.setMessage("Apakah Anda Yakin Ingin Logout?");
+            logoutAkun.setPositiveButton("Yes", (dialog, which) -> {
+                FirebaseAuth.getInstance().signOut();//logout
+                startActivity(new Intent(getApplicationContext(), LoginWartawan.class));
+                finish();
+            });
+            logoutAkun.setNegativeButton("No", (dialog, which) -> {
 
-    public void logout(View view){
-        FirebaseAuth.getInstance().signOut();//logout
-        startActivity(new Intent(getApplicationContext(),LoginWartawan.class));
-        finish();
+            });
+            logoutAkun.create().show();
+        });
+
     }
 
 }
