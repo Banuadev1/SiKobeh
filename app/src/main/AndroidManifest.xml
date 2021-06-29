@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SiKobeh">
-        <activity android:name=".CheckProfilWartawan"></activity>
+        <activity android:name=".UpdateDataWartawan"></activity>
+        <activity android:name=".CheckProfilWartawan" />
         <activity android:name=".LoginWartawan" />
         <activity android:name=".LoginKoordinator" />
         <activity android:name=".ForgotPassword" />

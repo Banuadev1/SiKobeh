@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
     TextView fullName,email,phone;
     FirebaseAuth fAuth;
     String userId;
-    Button resetPassLocal,changeProfileImage;
+    Button resetPassLocal,changeProfileImage, logOut;
     FirebaseUser user;
     DatabaseReference reff;
     ImageView profileImage;
@@ -48,6 +49,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
 
         profileImage = findViewById(R.id.profileImage);
         changeProfileImage = findViewById(R.id.changeProfile);
+        logOut = findViewById(R.id.buttonLogOut);
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -71,6 +73,20 @@ public class CheckProfilWartawan extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        changeProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), UpdateDataWartawan.class));
             }
         });
 
@@ -109,10 +125,16 @@ public class CheckProfilWartawan extends AppCompatActivity {
                         // close
                     }
                 });
-
                 passwordResetDialog.create().show();
             }
         });
 
     }
+
+    public void logout(View view){
+        FirebaseAuth.getInstance().signOut();//logout
+        startActivity(new Intent(getApplicationContext(),LoginWartawan.class));
+        finish();
+    }
+
 }
