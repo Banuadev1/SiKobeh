@@ -19,7 +19,7 @@ public class KoordinatorForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_koordinator_form);
-        register = (Button)findViewById(R.id.registerUser);
+        register = findViewById(R.id.registerUser);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -139,7 +139,8 @@ public class UpdateDataWartawan extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri){
-        final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser().getUid()+"/profile.jpg");
+        final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
+                .getUid()+"/profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

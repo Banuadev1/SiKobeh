@@ -64,11 +64,35 @@
 
             <ImageView
                 android:id="@+id/inputGambar"
-                android:layout_width="200dp"
+                android:layout_width="250dp"
                 android:layout_height="150dp"
-                android:background="@drawable/ic_baseline_panorama_24"
+                android:background="@drawable/ic_baseline_add_photo_alternate_24"
                 android:layout_marginTop="290dp"
-                android:layout_marginLeft="105dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                />
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/open_gallery"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="-5dp"
+                android:id="@+id/uploadProgress"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/open_gallery"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/inputGambar"
+                android:layout_marginLeft="50dp"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:text="Buka Gallery"
+                android:layout_marginTop="10dp"
                 />
 
             <Button
@@ -76,21 +100,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:id="@+id/add_submit"
-                android:layout_below="@id/inputGambar"
-                android:layout_centerHorizontal="true"
+                android:layout_below="@id/open_gallery"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
                 android:textSize="15sp"
                 android:textAllCaps="false"
                 android:text="Tambah Ke Laporan"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="50dp"
                 />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:id="@+id/add_back"
                 android:textAllCaps="false"
                 android:layout_below="@id/add_submit"
-                android:layout_centerHorizontal="true"
+                android:layout_marginRight="20dp"
                 android:textSize="15sp"
                 android:text="Kembali"/>
 
