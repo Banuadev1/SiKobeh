@@ -1,23 +1,19 @@
 package com.example.sikobeh;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -40,6 +35,7 @@ public class UpdateDataWartawan extends AppCompatActivity {
     Button simpan, kembali;
     FirebaseAuth auth;
     String UserId;
+    String getUrl;
     FirebaseUser user;
     StorageReference storageReference;
     DatabaseReference reference;
@@ -85,43 +81,34 @@ public class UpdateDataWartawan extends AppCompatActivity {
         });
 
         StorageReference profileRef = storageReference.child("users/"+auth.getCurrentUser().getUid()+"/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(updatePProfil);
-            }
+        profileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(updatePProfil));
+
+        updatePProfil.setOnClickListener(v -> {
+            Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(openGalleryIntent,1000);
         });
 
-        updatePProfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGalleryIntent,1000);
-            }
+        simpan.setOnClickListener(v -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("fullname", updateFName.getText().toString());
+            map.put("email", updateEmail.getText().toString());
+            map.put("age", updatePhone.getText().toString());
+            map.put("imageurl", getUrl);
+            String newEmail = updateEmail.getText().toString();
+            user.updateEmail(newEmail);
+            FirebaseDatabase.getInstance().getReference("Users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(reference.getKey()).updateChildren(map)
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
         });
 
-        simpan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("fullname", updateFName.getText().toString());
-                map.put("email", updateEmail.getText().toString());
-                map.put("age", updatePhone.getText().toString());
-                String newEmail = updateEmail.getText().toString();
-                user.updateEmail(newEmail);
-                FirebaseDatabase.getInstance().getReference("Users")
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child(reference.getKey()).updateChildren(map)
-                        .addOnSuccessListener(aVoid ->
-                                Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e ->
-                                Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
-            }
+        kembali.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), CheckProfilWartawan.class));
+            finish();
         });
-
-        kembali.setOnClickListener(v ->
-                startActivity(new Intent(getApplicationContext(), CheckProfilWartawan.class)));
-
     }
 
     @Override
@@ -133,30 +120,20 @@ public class UpdateDataWartawan extends AppCompatActivity {
 
                 //profileImage.setImageURI(imageUri);
 
-                uploadImageToFirebase(imageUri);
+                uploadDataToFirebase(imageUri);
             }
         }
     }
 
-    private void uploadImageToFirebase(Uri imageUri){
+    private void uploadDataToFirebase(Uri imageUri){
         final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
                 .getUid()+"/profile.jpg");
-        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(updatePProfil);
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UpdateDataWartawan.this, "Gagal!!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> getUrl = task.getResult().toString()).addOnSuccessListener(uri -> {
+                Picasso.get().load(imageUri).into(updatePProfil);
+                Toast.makeText(UpdateDataWartawan.this, "Upload Foto Berhasil!", Toast.LENGTH_SHORT).show();
+            });
+        }).addOnProgressListener(snapshot -> Toast.makeText(UpdateDataWartawan.this, "Uploading Foto...", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
     }
-
 }

@@ -108,6 +108,8 @@ public class LoginWartawan extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                     progressBar.setVisibility(View.GONE);
+                    email.setText("");
+                    password.setText("");
                     Toast.makeText(LoginWartawan.this, "Anda Berhasil Login", Toast.LENGTH_LONG).show();
                     openafterLogin();
 
