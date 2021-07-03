@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class LoginKoordinator extends AppCompatActivity {
 
@@ -34,12 +35,16 @@ public class LoginKoordinator extends AppCompatActivity {
 
     private void userlogin()
     {
+
         if (email.getText().toString().equals("Koordinator@gmail.com")&&password.getText().toString().equals("123456789"))
         {
             Intent i = new Intent(LoginKoordinator.this, KoordinatorForm.class);
             progressBar.setVisibility(View.GONE);
             startActivity(i);
             finish();
+        }
+        else{
+            Toast.makeText(LoginKoordinator.this, "Login Gagal Periksa Email atau Password anda!!", Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -96,16 +102,20 @@ public class LoginWartawan extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user.isEmailVerified()){
-                    openafterLogin();
+        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful())
+                {
                     progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginWartawan.this, "Anda Berhasil Login", Toast.LENGTH_LONG).show();
+                    openafterLogin();
+
                 }
-                else {
-                    user.sendEmailVerification();
-                    Toast.makeText(LoginWartawan.this, "Periksa Email anda untuk verifikasi!!", Toast.LENGTH_LONG).show();
+                else
+                {
+                    Toast.makeText(LoginWartawan.this, "Login Error : " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
