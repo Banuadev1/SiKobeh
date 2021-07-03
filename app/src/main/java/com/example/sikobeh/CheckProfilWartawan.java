@@ -57,13 +57,13 @@ public class CheckProfilWartawan extends AppCompatActivity {
         StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
 
-        reff = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataWartawan");
+        reff = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String Fname= snapshot.child("fullname").getValue().toString();
                 String Email= snapshot.child("email").getValue().toString();
-                String Age= snapshot.child("age").getValue().toString();
+                String Age= snapshot.child("pnumber").getValue().toString();
 
                 fullName.setText(Fname);
                 email.setText(Email);

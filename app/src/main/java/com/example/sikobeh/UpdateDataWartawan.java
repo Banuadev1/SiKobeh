@@ -59,14 +59,13 @@ public class UpdateDataWartawan extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         reference = FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("DataWartawan");
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String fullName= dataSnapshot.child("fullname").getValue().toString();
                 String mail= dataSnapshot.child("email").getValue().toString();
-                String phone= dataSnapshot.child("age").getValue().toString();
+                String phone= dataSnapshot.child("pnumber").getValue().toString();
 
                 updatePhone.setText(phone);
                 updateEmail.setText(mail);
@@ -92,12 +91,11 @@ public class UpdateDataWartawan extends AppCompatActivity {
             Map<String, Object> map = new HashMap<>();
             map.put("fullname", updateFName.getText().toString());
             map.put("email", updateEmail.getText().toString());
-            map.put("age", updatePhone.getText().toString());
+            map.put("pnumber", updatePhone.getText().toString());
             map.put("imageurl", getUrl);
             String newEmail = updateEmail.getText().toString();
             user.updateEmail(newEmail);
             FirebaseDatabase.getInstance().getReference("Users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child(reference.getKey()).updateChildren(map)
                     .addOnSuccessListener(aVoid ->
                             Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show())

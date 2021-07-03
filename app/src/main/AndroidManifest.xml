@@ -17,6 +17,8 @@
         android:theme="@style/Theme.SiKobeh">
         <activity android:name=".UpdateDataWartawan"></activity>
         <activity android:name=".CheckProfilWartawan" />
+        <activity android:name=".CekLaporan" />
+        <activity android:name=".CekLaporan2" />
         <activity android:name=".LoginWartawan" />
         <activity android:name=".LoginKoordinator" />
         <activity android:name=".ForgotPassword" />

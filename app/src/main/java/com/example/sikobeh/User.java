@@ -2,7 +2,7 @@ package com.example.sikobeh;
 
 public class User {
 
-    public String fullname, age, email;
+    public String fullname, pnumber, email, uid;
 
     public String getFullname() {
         return fullname;
@@ -12,12 +12,12 @@ public class User {
         this.fullname = fullname;
     }
 
-    public String getAge() {
-        return age;
+    public String getPnumber() {
+        return pnumber;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setPnumber(String pnumber) {
+        this.pnumber = pnumber;
     }
 
     public String getEmail() {
@@ -28,15 +28,24 @@ public class User {
         this.email = email;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     public User()
     {
 
     }
 
-    public User(String fullname, String age, String email)
+    public User(String fullname, String pnumber, String email, String uid)
     {
         this.fullname = fullname;
-        this.age = age;
+        this.pnumber = pnumber;
         this.email = email;
+        this.uid = uid;
     }
 }

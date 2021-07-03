@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">>
+
+    <TextView
+        android:id="@+id/judul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Judul"
+        android:textColor="#000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/judul"
+        android:layout_marginLeft="10dp"
+        android:text="Lokasi"
+        android:textColor="#000"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loc"
+        android:layout_marginLeft="10dp"
+        android:text="Deskripsi Berita"
+        android:textColor="#000"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        android:textSize="15dp" />
+
+</RelativeLayout>
