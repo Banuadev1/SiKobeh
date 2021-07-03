@@ -1,21 +1,23 @@
 package com.example.sikobeh;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +41,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         registeruser.setOnClickListener(this);
 
         editTextfullname = findViewById(R.id.fullname);
-        editTextage = findViewById(R.id.pnumber);
+        editTextage = findViewById(R.id.age);
         editTextemail = findViewById(R.id.email);
         editTextpassword = findViewById(R.id.password);
 
@@ -61,14 +63,14 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String email = editTextemail.getText().toString().trim();
         String password = editTextpassword.getText().toString().trim();
         String fullname = editTextfullname.getText().toString().trim();
-        String pnumber = editTextage.getText().toString().trim();
+        String age = editTextage.getText().toString().trim();
 
         if (fullname.isEmpty()) {
             editTextfullname.setError("Nama Lengkap harus di isi");
             editTextfullname.requestFocus();
             return;
         }
-        if (pnumber.isEmpty()) {
+        if (age.isEmpty()) {
             editTextage.setError("Umur harus di isi");
             editTextage.requestFocus();
             return;
@@ -100,9 +102,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    User user = new User(fullname, pnumber, email, uid);
+                    User user = new User(fullname, age, email, uid);
 
-                    FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataWartawan").setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
