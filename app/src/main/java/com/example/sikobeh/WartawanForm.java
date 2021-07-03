@@ -54,8 +54,7 @@ public class WartawanForm extends AppCompatActivity {
         });
 
         checkprofil.setOnClickListener((view) -> {
-            startActivity(new Intent(getApplicationContext(), CheckProfilWartawan.class));
-            finish();
+            startActivity(new Intent(getApplicationContext(), CheckProfilWartawan.class));;
         });
     }
 

@@ -69,7 +69,10 @@ public class WartawanInputB extends AppCompatActivity {
 
         gallery = findViewById(R.id.open_gallery);
         back = findViewById(R.id.add_back);
-        back.setOnClickListener((view) -> startActivity(new Intent(getApplicationContext(), WartawanForm.class)));
+        back.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), WartawanForm.class));
+            finish();
+        });
 
         submit = findViewById(R.id.add_submit);
         submit.setOnClickListener((view)-> processinsert(imageFilename, imageUri));
@@ -108,7 +111,6 @@ public class WartawanInputB extends AppCompatActivity {
                                 Toast.makeText(WartawanInputB.this, "Okee Sipp, Upload Data Berhasil", Toast.LENGTH_SHORT).show();
                             }
                         });
-
                     }
                 });
             }
