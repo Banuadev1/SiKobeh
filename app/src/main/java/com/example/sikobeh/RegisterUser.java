@@ -36,12 +36,11 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         banner = findViewById(R.id.banner);
         banner.setOnClickListener(this);
-        //sdasdasd
         registeruser = findViewById(R.id.registerUser);
         registeruser.setOnClickListener(this);
 
         editTextfullname = findViewById(R.id.fullname);
-        editTextage = findViewById(R.id.age);
+        editTextage = findViewById(R.id.pnumber);
         editTextemail = findViewById(R.id.email);
         editTextpassword = findViewById(R.id.password);
 
@@ -63,14 +62,14 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String email = editTextemail.getText().toString().trim();
         String password = editTextpassword.getText().toString().trim();
         String fullname = editTextfullname.getText().toString().trim();
-        String age = editTextage.getText().toString().trim();
+        String pnumber = editTextage.getText().toString().trim();
 
         if (fullname.isEmpty()) {
             editTextfullname.setError("Nama Lengkap harus di isi");
             editTextfullname.requestFocus();
             return;
         }
-        if (age.isEmpty()) {
+        if (pnumber.isEmpty()) {
             editTextage.setError("Umur harus di isi");
             editTextage.requestFocus();
             return;
@@ -102,9 +101,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    User user = new User(fullname, age, email, uid);
+                    User user = new User(fullname, pnumber, email, uid);
 
-                    FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataWartawan").setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 

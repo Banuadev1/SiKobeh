@@ -39,7 +39,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/age"
+        android:id="@+id/pnumber"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:layout_width="380dp"
