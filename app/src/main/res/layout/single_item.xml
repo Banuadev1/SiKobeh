@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    android:elevation="10dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/purple_500"
+        android:id="@+id/areaklik"
+        >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/beritaImage"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/profil_karyawan" />
 
     <TextView
         android:id="@+id/fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/beritaImage"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="Full Nama"
         android:textColor="#000"
         android:textSize="25sp"
@@ -16,10 +38,12 @@
 
     <TextView
         android:id="@+id/email"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/beritaImage"
         android:layout_below="@id/fullname"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="Email"
         android:textColor="#000"
         android:ellipsize="end"
@@ -29,15 +53,19 @@
 
     <TextView
         android:id="@+id/pnumber"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/beritaImage"
         android:layout_below="@id/email"
         android:layout_marginLeft="10dp"
-        android:text="Umur"
+        android:layout_marginRight="10dp"
+        android:text="Nomor Telepon"
         android:textColor="#000"
         android:ellipsize="end"
         android:maxLines="5"
         android:scrollbars="vertical"
         android:textSize="15dp" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
