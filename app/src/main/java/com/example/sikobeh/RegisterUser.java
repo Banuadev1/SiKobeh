@@ -34,7 +34,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         banner = findViewById(R.id.banner);
         banner.setOnClickListener(this);
-
+        //sdasdasd
         registeruser = findViewById(R.id.registerUser);
         registeruser.setOnClickListener(this);
 
