@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 public class WartawanForm extends AppCompatActivity {
 
     ExtendedFloatingActionButton fLaporan;
+    Toolbar toolBar;
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
     StorageReference storageReference;
@@ -38,13 +39,14 @@ public class WartawanForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wartawan_form);
         fLaporan = findViewById(R.id.bukaFLaporan);
+        toolBar = findViewById(R.id.toolbar);
         recyclerView = findViewById(R.id.listBerita);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         user = fAuth.getCurrentUser();
+
+        setSupportActionBar(toolBar);
 
         FirebaseRecyclerOptions<Berita> data = new FirebaseRecyclerOptions.Builder<Berita>()
                 .setQuery(FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataBerita"), Berita.class)
@@ -81,7 +83,6 @@ public class WartawanForm extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseAuth.getInstance().signOut();//logout
                         Intent intent = new Intent(WartawanForm.this, LoginWartawan.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
                     }

@@ -28,7 +28,6 @@ public class CekLaporan2 extends AppCompatActivity {
         setContentView(R.layout.activity_cek_laporan2);
         String value = getIntent().getStringExtra("key");
         recyclerView = findViewById(R.id.recview2);
-        getSupportActionBar().hide();
         database = FirebaseDatabase.getInstance().getReference("Users").child(value).child("DataBerita");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

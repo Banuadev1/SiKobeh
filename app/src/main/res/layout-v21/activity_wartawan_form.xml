@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".WartawanForm">
 
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar_form_wartawan"></include>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listBerita"
         android:layout_width="match_parent"

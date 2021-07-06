@@ -38,7 +38,6 @@ public class LoginWartawan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_wartawan);
-        getSupportActionBar().hide();
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         loginb = findViewById(R.id.loginb);
@@ -126,7 +125,6 @@ public class LoginWartawan extends AppCompatActivity {
 
     public void openafterLogin(){
         Intent intent = new Intent(this, WartawanForm.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

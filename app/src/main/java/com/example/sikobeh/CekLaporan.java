@@ -28,7 +28,6 @@ public class CekLaporan extends AppCompatActivity {
         setContentView(R.layout.activity_cek_laporan);
 
         recyclerView = findViewById(R.id.recview);
-        getSupportActionBar().hide();
         database = FirebaseDatabase.getInstance().getReference("Users");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

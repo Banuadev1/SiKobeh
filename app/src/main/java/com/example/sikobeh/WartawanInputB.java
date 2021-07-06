@@ -61,7 +61,6 @@ public class WartawanInputB extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wartawan_input_berita);
 
-        getSupportActionBar().hide();
         calendar = Calendar.getInstance();
         judul = findViewById(R.id.add_judul);
         desc = findViewById(R.id.add_desc);
