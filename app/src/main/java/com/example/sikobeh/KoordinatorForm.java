@@ -21,6 +21,7 @@ public class KoordinatorForm extends AppCompatActivity {
         setContentView(R.layout.activity_koordinator_form);
         register = (Button)findViewById(R.id.registerUser);
         laporan = (Button)findViewById(R.id.cekLaporan);
+        getSupportActionBar().hide();
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

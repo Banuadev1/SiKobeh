@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -34,14 +35,19 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.Reference;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class WartawanInputB extends AppCompatActivity {
     public static final int GALLERY_REQUEST_CODE = 105;
     Uri imageUri;
+    Calendar calendar;
     String imageFilename;
     EditText judul, desc, loc;
     Button submit, back, gallery;
@@ -55,6 +61,8 @@ public class WartawanInputB extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wartawan_input_berita);
 
+        getSupportActionBar().hide();
+        calendar = Calendar.getInstance();
         judul = findViewById(R.id.add_judul);
         desc = findViewById(R.id.add_desc);
         loc = findViewById(R.id.add_loc);
@@ -85,6 +93,16 @@ public class WartawanInputB extends AppCompatActivity {
         });
     }
 
+    public static String getTimeDate(long timestamp){
+        try{
+            Date timedate = new Date(timestamp);
+            SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+            return sfd.format(timedate);
+        }catch (Exception e){
+            return "date";
+        }
+    }
+
     private void processinsert(String Name, Uri photoUri){
         final StorageReference Reference = storageReference
                 .child("users/"+auth.getCurrentUser().getUid()).child("photoBerita/"+Name);
@@ -95,12 +113,14 @@ public class WartawanInputB extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         String getURL = task.getResult().toString();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+                        String datetime = simpleDateFormat.format(calendar.getTime());
                         Map<String, Object> map = new HashMap<>();
                         map.put("judul", judul.getText().toString());
                         map.put("desc", desc.getText().toString());
                         map.put("loc", loc.getText().toString());
                         map.put("beritaurl", getURL);
-                        map.put("timeupload", ServerValue.TIMESTAMP);
+                        map.put("timeupload", datetime);
                         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .child("DataBerita").push()
                                 .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {

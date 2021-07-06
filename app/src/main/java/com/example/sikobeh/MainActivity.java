@@ -8,12 +8,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity {
     private Button loginkoordinator, loginwartawan;
+    FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().hide();
+
+        auth = FirebaseAuth.getInstance();
+
         loginkoordinator = findViewById(R.id.LoginKoordinator);
         loginwartawan = findViewById(R.id.LoginWartawan);
 
@@ -24,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loginwartawan.setOnClickListener(new View.OnClickListener() {
+        /*/loginwartawan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WartawanOpen();
             }
-        });
+        });*/
     }
 
     public void KoordinatorOpen(){
@@ -37,9 +47,27 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void WartawanOpen(){
+    /*/public void WartawanOpen(){
         Intent intent = new Intent(this, LoginWartawan.class);
         startActivity(intent);
-    }
+    }*/
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = auth.getCurrentUser();
+
+        loginwartawan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user != null){
+                    startActivity(new Intent(MainActivity.this, WartawanForm.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginWartawan.class));
+                }
+                finish();
+            }
+        });
+    }
 }

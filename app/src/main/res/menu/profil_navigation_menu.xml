@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-        <item android:id="@+id/menuProfil"
-            android:icon="@drawable/ic_baseline_account_circle_24"
-            android:title="MenuProfil"
-            app:showAsAction="ifRoom"
-            >
-                <item android:id="@+id/checkprofil"
-                    android:title="Checkprofil"
-                    app:showAsAction="never"
-                    />
-                <item android:id="@+id/logout"
-                    android:title="Logout"
-                    app:showAsAction="never"
-                    />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+        <item
+            android:id="@+id/menunav"
+            android:title="Main Menu"
+            android:icon="@drawable/ic_baseline_menu_24"
+            app:showAsAction="always">
+                <menu>
+                        <item android:id="@+id/checprofil"
+                            android:title="Profil"
+                            android:icon="@drawable/profil_karyawan"
+                            android:iconTint="@color/black"
+                            app:showAsAction="never"
+                            />
+                        <item android:id="@+id/logout"
+                            android:title="Logout"
+                            android:icon="@drawable/ic_baseline_login_24"
+                            android:iconTint="@color/black"
+                            app:showAsAction="never"
+                            />
+                </menu>
         </item>
 </menu>

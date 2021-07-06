@@ -2,6 +2,7 @@ package com.example.sikobeh;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -105,21 +106,13 @@ public class CheckProfilWartawan extends AppCompatActivity {
             passwordResetDialog.create().show();
         });
 
-        logOut.setOnClickListener(v -> {
-            AlertDialog.Builder logoutAkun = new AlertDialog.Builder(v.getContext());
-            logoutAkun.setTitle("LogOut Akun");
-            logoutAkun.setMessage("Apakah Anda Yakin Ingin Logout?");
-            logoutAkun.setPositiveButton("Yes", (dialog, which) -> {
-                FirebaseAuth.getInstance().signOut();//logout
-                startActivity(new Intent(getApplicationContext(), LoginWartawan.class));
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), WartawanForm.class));
                 finish();
-            });
-            logoutAkun.setNegativeButton("No", (dialog, which) -> {
-
-            });
-            logoutAkun.create().show();
+            }
         });
 
     }
-
 }

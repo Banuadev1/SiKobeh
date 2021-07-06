@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:background="@color/purple_500"
     >
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,18 +16,6 @@
             android:textSize="20dp"
             android:textStyle="bold"
             android:text="Menu Wartawan"
-            />
-
-        <ImageView
-            android:id="@+id/profilbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_account_circle_24"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:minWidth="40dp"
-            android:minHeight="40dp"
-            android:scaleType="fitEnd"
             />
 
     </RelativeLayout>

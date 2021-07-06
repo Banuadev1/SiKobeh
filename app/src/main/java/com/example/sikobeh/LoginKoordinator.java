@@ -22,6 +22,7 @@ public class LoginKoordinator extends AppCompatActivity {
         setContentView(R.layout.activity_login_koordinator);
         loginb = findViewById(R.id.loginb);
         email = findViewById(R.id.email);
+        getSupportActionBar().hide();
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressbar);
 

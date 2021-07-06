@@ -45,6 +45,7 @@ public class UpdateDataWartawan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_data_wartawan);
 
+        getSupportActionBar().hide();
         updateFName = findViewById(R.id.profileFullName);
         updateEmail = findViewById(R.id.profileEmailAddress);
         updatePhone = findViewById(R.id.profilePhoneNo);
