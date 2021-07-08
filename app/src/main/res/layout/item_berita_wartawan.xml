@@ -68,6 +68,22 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="start" />
 
+    <TextView
+        android:id="@+id/tanggal"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locberita"
+        android:text="Tanggal"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="start" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

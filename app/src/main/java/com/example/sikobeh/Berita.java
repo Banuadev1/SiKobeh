@@ -6,15 +6,17 @@ public class Berita {
     public String judul;
     public String loc;
     public String beritaurl;
+    public String timeupload;
 
     public Berita() {
     }
 
-    public Berita(String desc, String judul, String loc, String beritaurl) {
+    public Berita(String desc, String judul, String loc, String beritaurl, String timeupload) {
         this.desc = desc;
         this.judul = judul;
         this.loc = loc;
         this.beritaurl = beritaurl;
+        this.timeupload = timeupload;
     }
 
     public String getDesc() {
@@ -45,5 +47,11 @@ public class Berita {
 
     public void setBeritaurl(String beritaurl) { this.beritaurl = beritaurl; }
 
+    public String getTimeupload() {
+        return timeupload;
+    }
 
+    public void setTimeupload(String timeupload) {
+        this.timeupload = timeupload;
+    }
 }

@@ -31,6 +31,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
         holder.judul.setText(model.getJudul());
         holder.deskripsi.setText(model.getDesc());
         holder.lokasi.setText(model.getLoc());
+        holder.tanggal.setText(model.getTimeupload());
 
         Glide.with(holder.fotoBerita.getContext()).load(model.getBeritaurl())
                 .placeholder(R.drawable.ic_baseline_add_photo_alternate_24)
@@ -45,7 +46,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView judul, deskripsi, lokasi;
+        TextView judul, deskripsi, lokasi, tanggal;
         ImageView fotoBerita;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -53,6 +54,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             deskripsi = itemView.findViewById(R.id.descberita);
             lokasi = itemView.findViewById(R.id.locberita);
             fotoBerita = itemView.findViewById(R.id.fotoberita);
+            tanggal = itemView.findViewById(R.id.tanggal);
         }
     }
 

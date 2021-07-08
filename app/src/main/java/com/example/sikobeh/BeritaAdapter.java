@@ -37,6 +37,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
         holder.judul.setText(berita.getJudul());
         holder.loc.setText(berita.getLoc());
         holder.desc.setText(berita.getDesc());
+        holder.tanggal.setText(berita.getBeritaurl());
         Glide.with(holder.fotoBerita.getContext()).load(berita.getBeritaurl())
                 .placeholder(R.drawable.ic_baseline_add_photo_alternate_24)
                     .error(R.drawable.ic_baseline_account_circle_24).into(holder.fotoBerita);
@@ -48,7 +49,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView judul, loc, desc;
+        TextView judul, loc, desc, tanggal;
         ImageView fotoBerita;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -56,6 +57,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             judul = itemView.findViewById(R.id.judultext);
             loc = itemView.findViewById(R.id.locberita);
             desc = itemView.findViewById(R.id.descberita);
+            tanggal = itemView.findViewById(R.id.tanggal);
             fotoBerita = itemView.findViewById(R.id.fotoberita);
         }
     }
