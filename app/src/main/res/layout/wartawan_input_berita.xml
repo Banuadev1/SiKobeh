@@ -66,11 +66,11 @@
                 android:id="@+id/inputGambar"
                 android:layout_width="250dp"
                 android:layout_height="150dp"
-                android:background="@drawable/ic_baseline_add_photo_alternate_24"
-                android:layout_marginTop="290dp"
+                android:layout_below="@+id/add_loc"
                 android:layout_centerHorizontal="true"
-                android:scaleType="fitCenter"
-                />
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                android:scaleType="fitCenter" />
 
             <ProgressBar
                 android:layout_width="40dp"

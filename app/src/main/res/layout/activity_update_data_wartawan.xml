@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".UpdateDataWartawan">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="UPDATE DATA"
+        app:titleMarginStart="138dp"
+        app:titleTextColor="@color/white" />
+
     <EditText
         android:id="@+id/profileFullName"
         android:layout_width="0dp"
@@ -14,23 +24,26 @@
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
+        android:drawableStart="@drawable/profil_karyawan"
+        android:drawablePadding="10dp"
         android:hint="Your Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImageView"
         android:layout_marginLeft="24dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_baseline_email_24" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImageView"
         android:layout_width="131dp"
         android:layout_height="143dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/ic_baseline_account_circle_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/profil_karyawan" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
     <EditText
         android:id="@+id/profileEmailAddress"
@@ -40,11 +53,14 @@
         android:layout_marginTop="26dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
+        android:drawableStart="@drawable/ic_baseline_email_24"
+        android:drawablePadding="10dp"
         android:hint="Your Email Address"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileFullName" />
+        app:layout_constraintTop_toBottomOf="@+id/profileFullName"
+        android:drawableLeft="@drawable/ic_baseline_email_24" />
 
     <EditText
         android:id="@+id/profilePhoneNo"
@@ -52,13 +68,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="26dp"
+        android:drawableStart="@drawable/ic_baseline_phone_24"
+        android:drawablePadding="10dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="phone"
         android:hint="Phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailAddress"
+        android:drawableLeft="@drawable/ic_baseline_phone_24" />
 
     <Button
         android:id="@+id/saveProfileInfo"

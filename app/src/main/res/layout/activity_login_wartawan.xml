@@ -24,27 +24,37 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:layout_margin="20dp"
-            android:hint="Masukan Email Anda"/>
+            android:drawablePadding="15dp"
+            android:background="@drawable/round_border"
+            android:drawableStart="@drawable/ic_baseline_email_24"
+            android:drawableLeft="@drawable/ic_baseline_email_24"
+            android:hint="Masukan Email Anda"
+            android:inputType="textEmailAddress"
+            android:padding="16dp" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:padding="16dp"
+            android:drawablePadding="15dp"
             android:layout_margin="20dp"
+            android:drawableLeft="@drawable/ic_baseline_lock_24"
             android:inputType="textPassword"
-            android:hint="Masukan Password Anda"/>
+            android:hint="Masukan Password Anda"
+            android:drawableStart="@drawable/ic_baseline_lock_24" />
 
         <CheckBox
             android:id="@+id/lihatPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lihat Password"
+            android:drawablePadding="5dp"
             android:layout_marginLeft="100dp"
             android:layout_marginBottom="20dp"
-            android:textSize="17dp"
-            />
+            android:textSize="17dp"/>
 
         <Button
             android:layout_width="wrap_content"

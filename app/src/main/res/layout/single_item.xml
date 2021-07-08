@@ -42,14 +42,19 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/beritaImage"
         android:layout_below="@id/fullname"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_baseline_email_24"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableTint="@color/white"
         android:text="Email"
         android:textColor="#000"
         android:ellipsize="end"
         android:maxLines="5"
         android:scrollbars="vertical"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:drawableLeft="@drawable/ic_baseline_email_24" />
 
     <TextView
         android:id="@+id/pnumber"
@@ -58,13 +63,18 @@
         android:layout_toRightOf="@id/beritaImage"
         android:layout_below="@id/email"
         android:layout_marginLeft="10dp"
+        android:drawableStart="@drawable/ic_baseline_phone_24"
+        android:layout_marginTop="5dp"
+        android:drawableTint="@color/white"
+        android:drawablePadding="10dp"
         android:layout_marginRight="10dp"
         android:text="Nomor Telepon"
         android:textColor="#000"
         android:ellipsize="end"
         android:maxLines="5"
         android:scrollbars="vertical"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:drawableLeft="@drawable/ic_baseline_phone_24" />
 
     </RelativeLayout>
 

@@ -37,7 +37,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
         holder.judul.setText(berita.getJudul());
         holder.loc.setText(berita.getLoc());
         holder.desc.setText(berita.getDesc());
-        holder.tanggal.setText(berita.getBeritaurl());
+        holder.tanggal.setText(berita.getTimeupload());
         Glide.with(holder.fotoBerita.getContext()).load(berita.getBeritaurl())
                 .placeholder(R.drawable.ic_baseline_add_photo_alternate_24)
                     .error(R.drawable.ic_baseline_account_circle_24).into(holder.fotoBerita);

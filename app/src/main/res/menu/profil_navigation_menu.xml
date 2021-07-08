@@ -11,7 +11,7 @@
                 <menu>
                         <item android:id="@+id/checprofil"
                             android:title="Profil"
-                            android:icon="@drawable/profil_karyawan"
+                            android:icon="@drawable/ic_baseline_account_circle_24"
                             android:iconTint="@color/black"
                             app:showAsAction="never"
                             />

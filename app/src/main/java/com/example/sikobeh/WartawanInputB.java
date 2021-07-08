@@ -123,7 +123,7 @@ public class WartawanInputB extends AppCompatActivity {
                             public void onSuccess(Void unused) {
                                 pBerita = null;
                                 loadingUpload.setVisibility(View.INVISIBLE);
-                                Toast.makeText(WartawanInputB.this, "Okee Sipp, Upload Data Berhasil", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WartawanInputB.this, "Upload Berita Berhasil", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -132,7 +132,7 @@ public class WartawanInputB extends AppCompatActivity {
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                Toast.makeText(WartawanInputB.this, "Sabar Gan, Sedang Upload Data :v", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WartawanInputB.this, "Sedang Mengupload...", Toast.LENGTH_SHORT).show();
                 loadingUpload.setVisibility(View.VISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {

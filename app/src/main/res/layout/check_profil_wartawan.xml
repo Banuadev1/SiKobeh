@@ -7,6 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_profil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="PROFIL WARTAWAN"
+        app:titleMarginStart="120dp"
+        app:titleTextColor="@color/white" />
+
     <Button
         android:id="@+id/buttonLogOut"
         android:layout_width="0dp"
@@ -29,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.13999999"
-        android:src="@drawable/profil_karyawan" />
+        android:src="@drawable/ic_baseline_account_circle_24" />
 
     <TextView
         android:id="@+id/profileName"

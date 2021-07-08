@@ -9,11 +9,21 @@
     <include android:id="@+id/toolbar"
         layout="@layout/toolbar_form_wartawan"></include>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List Berita : "
+        android:id="@+id/text_list_berita"
+        android:textStyle="bold"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/toolbar"
+        android:textSize="17dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listBerita"
+        android:layout_below = "@+id/text_list_berita"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
         />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
