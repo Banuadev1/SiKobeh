@@ -72,15 +72,6 @@
                 android:src="@drawable/ic_baseline_add_photo_alternate_24"
                 android:scaleType="fitCenter" />
 
-            <ProgressBar
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/open_gallery"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="-5dp"
-                android:id="@+id/uploadProgress"
-                />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,7 +97,7 @@
                 android:textSize="15sp"
                 android:textAllCaps="false"
                 android:text="Tambah Ke Laporan"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 />
 
             <Button

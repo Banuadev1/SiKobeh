@@ -2,7 +2,9 @@ package com.example.sikobeh;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,8 +43,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void KoordinatorOpen(){
-        Intent intent = new Intent(this, LoginKoordinator.class);
-        startActivity(intent);
+        SharedPreferences sharedPreferences;
+        sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
+        int j = sharedPreferences.getInt("logged", 0);
+        if(j > 0){
+            Intent intent = new Intent(this, KoordinatorForm.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            Intent intent = new Intent(this, LoginKoordinator.class);
+            startActivity(intent);
+        }
     }
 
     /*/public void WartawanOpen(){

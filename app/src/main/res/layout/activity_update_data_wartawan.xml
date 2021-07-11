@@ -7,43 +7,54 @@
     tools:context=".UpdateDataWartawan">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:background="@color/purple_500"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="UPDATE DATA"
-        app:titleMarginStart="138dp"
-        app:titleTextColor="@color/white" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:text="Update data" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/profileFullName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
-        android:ems="10"
+        android:layout_marginRight="16dp"
         android:drawableStart="@drawable/profil_karyawan"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
+        android:ems="10"
         android:hint="Your Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="16dp"
-        android:drawableLeft="@drawable/ic_baseline_email_24" />
+        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImageView"
         android:layout_width="131dp"
         android:layout_height="143dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/ic_baseline_account_circle_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/profileEmailAddress"
@@ -52,15 +63,15 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="24dp"
-        android:ems="10"
         android:drawableStart="@drawable/ic_baseline_email_24"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
+        android:ems="10"
         android:hint="Your Email Address"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileFullName"
-        android:drawableLeft="@drawable/ic_baseline_email_24" />
+        app:layout_constraintTop_toBottomOf="@+id/profileFullName" />
 
     <EditText
         android:id="@+id/profilePhoneNo"
@@ -68,16 +79,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="26dp"
-        android:drawableStart="@drawable/ic_baseline_phone_24"
-        android:drawablePadding="10dp"
         android:layout_marginEnd="24dp"
+        android:drawableStart="@drawable/ic_baseline_phone_24"
+        android:drawableLeft="@drawable/ic_baseline_phone_24"
+        android:drawablePadding="10dp"
         android:ems="10"
-        android:inputType="phone"
         android:hint="Phone"
+        android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileEmailAddress"
-        android:drawableLeft="@drawable/ic_baseline_phone_24" />
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailAddress" />
 
     <Button
         android:id="@+id/saveProfileInfo"
@@ -98,8 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveProfileInfo"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/saveProfileInfo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

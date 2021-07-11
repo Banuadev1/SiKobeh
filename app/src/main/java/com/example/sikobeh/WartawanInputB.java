@@ -1,6 +1,7 @@
 package com.example.sikobeh;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class WartawanInputB extends AppCompatActivity {
     public static final int GALLERY_REQUEST_CODE = 105;
@@ -50,7 +54,6 @@ public class WartawanInputB extends AppCompatActivity {
     StorageReference storageReference;
     FirebaseAuth auth;
     DatabaseReference reference;
-    ProgressBar loadingUpload;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +64,6 @@ public class WartawanInputB extends AppCompatActivity {
         desc = findViewById(R.id.add_desc);
         loc = findViewById(R.id.add_loc);
         pBerita = findViewById(R.id.inputGambar);
-        loadingUpload = findViewById(R.id.uploadProgress);
 
         auth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -76,10 +78,11 @@ public class WartawanInputB extends AppCompatActivity {
             finish();
         });
 
-        submit = findViewById(R.id.add_submit);
-        submit.setOnClickListener((view)-> processinsert(imageFilename, imageUri));
+        submit = findViewById( R.id.add_submit);
+        submit.setOnClickListener((view)-> {
+            processinsert(imageFilename, imageUri);
+        });
 
-        loadingUpload.setVisibility(View.INVISIBLE);
 
         gallery.setOnClickListener(v -> {
             Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -98,6 +101,32 @@ public class WartawanInputB extends AppCompatActivity {
     }
 
     private void processinsert(String Name, Uri photoUri){
+        String judulB = judul.getText().toString();
+        String descB = desc.getText().toString();
+        String locB = loc.getText().toString();
+
+        if(judulB.isEmpty()){
+            judul.setError("Judul Berita Tidak Boleh Kosong!!");
+            judul.requestFocus();
+            return;
+        }
+        if(descB.isEmpty()){
+            desc.setError("Deskripsi Berita Tidak Boleh Kosong!!");
+            desc.requestFocus();
+            return;
+        }
+        if(locB.isEmpty()){
+            loc.setError("Lokasi Berita Tidak Boleh Kosong!!");
+            loc.requestFocus();
+            return;
+        }
+        if(imageUri == null){
+            Toast.makeText(this, "Gambar Untuk Data Berita Belum Dimasukkan!!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Sedang Mengupload Data...");
+        pd.show();
         final StorageReference Reference = storageReference
                 .child("users/"+auth.getCurrentUser().getUid()).child("photoBerita/"+Name);
         Reference.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -106,40 +135,48 @@ public class WartawanInputB extends AppCompatActivity {
                 Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
-                        String getURL = task.getResult().toString();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-                        String datetime = simpleDateFormat.format(calendar.getTime());
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("judul", judul.getText().toString());
-                        map.put("desc", desc.getText().toString());
-                        map.put("loc", loc.getText().toString());
-                        map.put("beritaurl", getURL);
-                        map.put("timeupload", datetime);
-                        map.put("month", datetime.substring(3, 5));
-                        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child("DataBerita").push()
-                                .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                pBerita = null;
-                                loadingUpload.setVisibility(View.INVISIBLE);
-                                Toast.makeText(WartawanInputB.this, "Upload Berita Berhasil", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        if (task.isSuccessful()){
+                            String getURL = task.getResult().toString();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+                            String datetime = simpleDateFormat.format(calendar.getTime());
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("judul", judulB);
+                            map.put("desc", descB);
+                            map.put("loc", locB);
+                            map.put("beritaurl", getURL);
+                            map.put("timeupload", datetime);
+                            map.put("month", datetime.substring(3, 5));
+                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child("DataBerita").push()
+                                    .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    judul.setText("");
+                                    desc.setText("");
+                                    loc.setText("");
+                                    pBerita.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
+                                    Toast.makeText(WartawanInputB.this, "Upload Berita Berhasil", Toast.LENGTH_SHORT).show();
+                                    pd.dismiss();
+                                }
+                            });
+                        }
+                        else{
+                            Toast.makeText(WartawanInputB.this, "Gagal Upload Data Berita!", Toast.LENGTH_SHORT).show();
+                            pd.dismiss();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(WartawanInputB.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                Toast.makeText(WartawanInputB.this, "Sedang Mengupload...", Toast.LENGTH_SHORT).show();
-                loadingUpload.setVisibility(View.VISIBLE);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                loadingUpload.setVisibility(View.INVISIBLE);
-                Toast.makeText(WartawanInputB.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
+                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                pd.setMessage("Mohon Tunggu.." + (int) progressPercent + "%");
             }
         });
     }
@@ -155,7 +192,7 @@ public class WartawanInputB extends AppCompatActivity {
                 Log.d("tag", "onActivityResult: Gallery Image Uri:  " +  imageFilename);
                 pBerita.setImageURI(imageUri);
 
-                Picasso.get().load(imageUri).into(pBerita);;
+                Picasso.get().load(imageUri).into(pBerita);
             }
 
         }
@@ -197,5 +234,17 @@ public class WartawanInputB extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
+
+   /* public void setNotif(){
+        KoordinatorForm koordinatorForm = new KoordinatorForm();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(WartawanInputB.this, "NotifBeritaMasuk");
+        builder.setContentTitle("Laporan Berita Terbaru Sudah Masuk");
+        builder.setContentText("Hello Koordinator, Silahkan Cek Laporan Berita Harian Yang Baru - Baru Masuk");
+        builder.setSmallIcon(R.drawable.profil_karyawan);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(koordinatorForm.getApplicationContext());
+        managerCompat.notify(1, builder.build());
+    }*/
 
 }

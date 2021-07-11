@@ -1,6 +1,7 @@
 package com.example.sikobeh;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -124,14 +125,23 @@ public class UpdateDataWartawan extends AppCompatActivity {
     }
 
     private void uploadDataToFirebase(Uri imageUri){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Sedang Mengganti Foto Profil..");
+        pd.show();
         final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
                 .getUid()+"/profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> getUrl = task.getResult().toString()).addOnSuccessListener(uri -> {
                 Picasso.get().load(imageUri).into(updatePProfil);
                 Toast.makeText(UpdateDataWartawan.this, "Upload Foto Berhasil!", Toast.LENGTH_SHORT).show();
+                pd.dismiss();
             });
-        }).addOnProgressListener(snapshot -> Toast.makeText(UpdateDataWartawan.this, "Uploading Foto...", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
+        }).addOnProgressListener(snapshot -> {
+            double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            pd.setMessage("Mohon Tunggu.." + (int) progressPercent + "%");
+        })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
+                });
     }
 }

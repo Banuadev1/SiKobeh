@@ -1,18 +1,23 @@
 package com.example.sikobeh;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class CheckProfilWartawan extends AppCompatActivity {
@@ -34,6 +40,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
     DatabaseReference reff;
     ImageView profileImage;
     StorageReference storageReference;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
         fullName = findViewById(R.id.profileName);
         email    = findViewById(R.id.profileEmail);
         resetPassLocal = findViewById(R.id.resetPasswordLocal);
+        progressBar = findViewById(R.id.progressBar1);
 
         profileImage = findViewById(R.id.profileImage);
         changeProfileImage = findViewById(R.id.changeProfile);
@@ -56,8 +64,22 @@ public class CheckProfilWartawan extends AppCompatActivity {
         user = fAuth.getCurrentUser();
 
         StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(profileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+            }
+        });
         reff = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         reff.addValueEventListener(new ValueEventListener() {
             @Override
