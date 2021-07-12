@@ -99,9 +99,7 @@ public class CheckProfilWartawan extends AppCompatActivity {
             }
         });
 
-        logOut.setOnClickListener(v -> {
 
-        });
 
         changeProfileImage.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), UpdateDataWartawan.class));
@@ -131,8 +129,8 @@ public class CheckProfilWartawan extends AppCompatActivity {
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), WartawanForm.class));
-                finish();
+                onBackPressed();
+
             }
         });
 

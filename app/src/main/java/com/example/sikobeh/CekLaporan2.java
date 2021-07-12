@@ -14,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class CekLaporan2 extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class CekLaporan2 extends AppCompatActivity {
         list = new ArrayList<>();
         beritaAdapter = new BeritaAdapter(this,list);
         recyclerView.setAdapter(beritaAdapter);
-
+        Collections.reverse(list);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -43,6 +45,7 @@ public class CekLaporan2 extends AppCompatActivity {
                     Berita berita = dataSnapshot.getValue(Berita.class);
                     list.add(berita);
                 }
+
                 beritaAdapter.notifyDataSetChanged();
             }
 

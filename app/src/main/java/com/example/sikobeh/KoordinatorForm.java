@@ -127,7 +127,7 @@ public class KoordinatorForm extends AppCompatActivity {
     private void getNotification(){
         SharedPreferences sharedPref = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
         int n = sharedPref.getInt("logged", 1);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && n == 1) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && n > 0) {
             NotificationChannel channel = new NotificationChannel("NotifBeritaMasuk", "Notif Input Berita", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);

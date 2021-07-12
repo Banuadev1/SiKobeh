@@ -127,7 +127,4 @@ public class LoginWartawan extends AppCompatActivity {
         finish();
     }
 
-    public void pembersihanData(){
-
-    }
 }

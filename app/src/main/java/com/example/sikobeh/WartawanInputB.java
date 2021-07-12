@@ -74,7 +74,7 @@ public class WartawanInputB extends AppCompatActivity {
         gallery = findViewById(R.id.open_gallery);
         back = findViewById(R.id.add_back);
         back.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), WartawanForm.class));
+            onBackPressed();
             finish();
         });
 
