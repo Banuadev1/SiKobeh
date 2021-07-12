@@ -140,7 +140,7 @@ public class KoordinatorForm extends AppCompatActivity {
         builder.setAutoCancel(true);
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(999, builder.build());
+        managerCompat.notify(1, builder.build());
         }
     }
 }
