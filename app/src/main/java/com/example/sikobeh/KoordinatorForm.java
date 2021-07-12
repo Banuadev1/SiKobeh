@@ -126,12 +126,13 @@ public class KoordinatorForm extends AppCompatActivity {
 
     private void getNotification(){
         SharedPreferences sharedPref = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
-        int n = sharedPref.getInt("logged", 1);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && n > 0) {
+        int n = sharedPref.getInt("logged", 0);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("NotifBeritaMasuk", "Notif Input Berita", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
+        if(n > 0 ){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NotifBeritaMasuk");
         builder.setContentTitle("Ada Laporan Berita Terbaru Yang Sudah Masuk!!");
         builder.setContentText("Hello Koordinator, Silahkan Cek Laporan Berita Harian Yang Baru - Baru Masuk");
@@ -140,5 +141,6 @@ public class KoordinatorForm extends AppCompatActivity {
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(999, builder.build());
+        }
     }
 }

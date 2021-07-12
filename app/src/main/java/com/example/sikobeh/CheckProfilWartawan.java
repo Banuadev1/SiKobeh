@@ -100,7 +100,6 @@ public class CheckProfilWartawan extends AppCompatActivity {
         });
 
 
-
         changeProfileImage.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), UpdateDataWartawan.class));
             finish();
