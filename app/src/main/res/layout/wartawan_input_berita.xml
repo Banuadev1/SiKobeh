@@ -30,6 +30,8 @@
             <EditText
                 android:id="@+id/add_judul"
                 android:layout_width="300dp"
+                android:background="@drawable/squere_border"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:layout_centerHorizontal="true"
@@ -42,6 +44,8 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_desc"
+                android:background="@drawable/squere_border"
+                android:padding="10dp"
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/add_judul"
@@ -53,6 +57,8 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_loc"
+                android:background="@drawable/squere_border"
+                android:padding="10dp"
                 android:layout_below="@id/add_desc"
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
@@ -61,6 +67,8 @@
                 android:layout_marginBottom="15dp"/>
 
             <ImageView
+                android:background="@drawable/squere_border"
+                android:padding="5dp"
                 android:id="@+id/inputGambar"
                 android:layout_width="250dp"
                 android:layout_height="150dp"

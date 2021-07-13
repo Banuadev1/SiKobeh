@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -71,13 +72,21 @@ public class CheckProfilWartawan extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         progressBar.setVisibility(View.INVISIBLE);
+
                     }
 
                     @Override
                     public void onError(Exception e) {
-
+                        progressBar.setVisibility(View.INVISIBLE);
+                        profileImage.setVisibility(View.VISIBLE);
                     }
                 });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.INVISIBLE);
+                profileImage.setVisibility(View.VISIBLE);
             }
         });
         reff = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
