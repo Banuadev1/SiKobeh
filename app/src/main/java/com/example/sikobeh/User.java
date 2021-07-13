@@ -2,7 +2,7 @@ package com.example.sikobeh;
 
 public class User {
 
-    public String fullname, pnumber, email, uid;
+    public String fullname, pnumber, email, uid, imageurl;
 
     public String getFullname() {
         return fullname;
@@ -34,6 +34,14 @@ public class User {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getImageurl() {
+        return imageurl;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
     }
 
     public User()

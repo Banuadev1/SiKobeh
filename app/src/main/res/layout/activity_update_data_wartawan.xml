@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="40dip"
-        android:background="@color/purple_500"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:textSize="20dp"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorOnPrimary"
             android:text="Update data" />
 
     </androidx.appcompat.widget.Toolbar>

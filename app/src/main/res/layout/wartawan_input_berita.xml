@@ -22,6 +22,7 @@
                 android:text="Tambah Laporan Berita"
                 android:textSize="25dp"
                 android:textStyle="bold"
+                android:textColor="?attr/colorOnSecondary"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 />
@@ -35,7 +36,6 @@
                 android:hint="Judul Berita"
                 android:inputType="textMultiLine"
                 android:layout_marginTop="100dp"
-                android:textColor="#000"
                 android:textSize="20sp" />
 
             <EditText
@@ -47,8 +47,7 @@
                 android:layout_below="@id/add_judul"
                 android:inputType="textMultiLine"
                 android:hint="Deskripsi Berita"
-                android:layout_marginBottom="15dp"
-                android:textColor="#000"/>
+                android:layout_marginBottom="15dp"/>
 
             <EditText
                 android:layout_width="300dp"
@@ -59,8 +58,7 @@
                 android:layout_centerHorizontal="true"
                 android:inputType="textMultiLine"
                 android:hint="Lokasi Peliputan"
-                android:layout_marginBottom="15dp"
-                android:textColor="#000"/>
+                android:layout_marginBottom="15dp"/>
 
             <ImageView
                 android:id="@+id/inputGambar"
@@ -108,6 +106,7 @@
                 android:textAllCaps="false"
                 android:layout_below="@id/add_submit"
                 android:layout_marginRight="20dp"
+                android:backgroundTint="#c3181e"
                 android:textSize="15sp"
                 android:text="Kembali"/>
 

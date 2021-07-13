@@ -24,6 +24,4 @@
         android:layout_alignParentBottom="true"
         android:text="Sistem Informasi Konsep Berita Harian"/>
 
-
-
 </RelativeLayout>

@@ -2,18 +2,23 @@ package com.example.sikobeh;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,13 +55,63 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        /*
+        Glide.with(holder.bimage.getContext()).load(user.getImageurl()).
+            listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    holder.progressBar.setVisibility(View.INVISIBLE);
+                    holder.bimage.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            }).error(R.drawable.ic_baseline_account_circle_24_white).into(holder.bimage);
+        */
         StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(holder.bimage));
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.bimage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            holder.progressBar.setVisibility(View.INVISIBLE);
+                            holder.bimage.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            holder.progressBar.setVisibility(View.INVISIBLE);
+                            holder.bimage.setVisibility(View.VISIBLE);
+                        }
+                    });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                holder.progressBar.setVisibility(View.INVISIBLE);
+                holder.bimage.setVisibility(View.VISIBLE);
+            }
+        });
 
         holder.cardView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CekLaporan2.class);
-            intent.putExtra("key", value);
-            context.startActivity(intent);
+            String value2 = holder.fullname.getText().toString().trim();
+            lihatBerita(value, value2);
+        });
+        holder.fullname.setOnClickListener(v -> {
+            lihatBerita(value, holder.fullname.getText().toString().trim());
+        });
+        holder.bimage.setOnClickListener(v -> {
+            lihatBerita(value, holder.fullname.getText().toString().trim());
+        });
+        holder.pnumber.setOnClickListener(v -> {
+            lihatBerita(value, holder.fullname.getText().toString().trim());
+        });
+        holder.email.setOnClickListener(v -> {
+            lihatBerita(value, holder.fullname.getText().toString().trim());
         });
     }
 
@@ -70,6 +125,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         TextView fullname, email, pnumber;
         CircleImageView bimage;
         RelativeLayout cardView;
+        ProgressBar progressBar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,14 +135,14 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             pnumber = (TextView) itemView.findViewById(R.id.pnumber);
             bimage = (CircleImageView) itemView.findViewById(R.id.beritaImage);
             cardView = (RelativeLayout) itemView.findViewById(R.id.areaklik);
-
-            fullname.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }
 
+    private void lihatBerita(String value, String value2){
+        Intent intent = new Intent(context, CekLaporan2.class);
+        intent.putExtra("key2", value2);
+        intent.putExtra("key", value);
+        context.startActivity(intent);
+    }
 }

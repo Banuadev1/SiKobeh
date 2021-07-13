@@ -12,13 +12,11 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -104,9 +102,9 @@ public class KoordinatorForm extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("LogOut Akun");
+        builder.setTitle("Logout Akun");
         builder.setMessage("Apakah Anda Yakin Ingin Logout?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 editor.putInt("logged", 0);
@@ -115,7 +113,7 @@ public class KoordinatorForm extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

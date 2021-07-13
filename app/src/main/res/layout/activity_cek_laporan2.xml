@@ -6,8 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".CekLaporan2">
 
+    <include
+        android:id="@+id/toolbar2"
+        layout="@layout/toolbar_form_koordinator" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Daftar Berita :"
+        android:textColor="?attr/colorOnSecondary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_below="@id/toolbar2"
+        android:id="@+id/ket1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Berita dari"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="14sp"
+        android:layout_below="@id/ket1"
+        android:id="@+id/ket2_berita"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recview2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/ket2_berita"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Belum ada berita yang ditambahkan"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:id="@+id/idKosong" />
+
 </RelativeLayout>

@@ -115,7 +115,6 @@ public class WartawanForm extends AppCompatActivity {
         dataBeritaAdapter = new DataBeritaAdapter(data);
         recyclerView.setAdapter(dataBeritaAdapter);
 
-
         fLaporan.setOnClickListener((view) ->{
             startActivity(new Intent(getApplicationContext(), WartawanInputB.class));
         });

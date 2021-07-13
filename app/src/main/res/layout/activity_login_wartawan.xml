@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="20sp"
             android:text="Silahkan Login"/>
 
@@ -59,6 +60,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="40dp"
             android:text="Login"
             android:id="@+id/loginb"/>
 
@@ -69,6 +71,7 @@
             android:text="Forgot Password?"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="?attr/colorOnSecondary"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="0dp" />
 

@@ -11,36 +11,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:background="@color/purple_500"
-        android:id="@+id/areaklik"
-        >
+        android:background="?attr/colorPrimary"
+        android:id="@+id/areaklik" >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/beritaImage"
-        android:layout_height="100dp"
-        android:layout_width="100dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/profil_karyawan" />
+        <FrameLayout
+            android:id="@+id/mycontainer"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.044">
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="@android:style/Widget.ProgressBar.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:progress="1"
+                android:visibility="visible" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/beritaImage"
+                android:visibility="invisible"
+                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_baseline_account_circle_24_white" />
+
+        </FrameLayout>
 
     <TextView
         android:id="@+id/fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/beritaImage"
+        android:layout_toRightOf="@id/mycontainer"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="Full Nama"
-        android:textColor="#000"
-        android:textSize="25sp"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/beritaImage"
+        android:layout_toRightOf="@id/mycontainer"
         android:layout_below="@id/fullname"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_baseline_email_24"
@@ -49,18 +73,18 @@
         android:layout_marginTop="10dp"
         android:drawableTint="@color/white"
         android:text="Email"
-        android:textColor="#000"
         android:ellipsize="end"
         android:maxLines="5"
         android:scrollbars="vertical"
         android:textSize="15dp"
+        android:textColor="?attr/colorOnPrimary"
         android:drawableLeft="@drawable/ic_baseline_email_24" />
 
     <TextView
         android:id="@+id/pnumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/beritaImage"
+        android:layout_toRightOf="@id/mycontainer"
         android:layout_below="@id/email"
         android:layout_marginLeft="10dp"
         android:drawableStart="@drawable/ic_baseline_phone_24"
@@ -69,11 +93,11 @@
         android:drawablePadding="10dp"
         android:layout_marginRight="10dp"
         android:text="Nomor Telepon"
-        android:textColor="#000"
         android:ellipsize="end"
         android:maxLines="5"
         android:scrollbars="vertical"
         android:textSize="15dp"
+        android:textColor="?attr/colorOnPrimary"
         android:drawableLeft="@drawable/ic_baseline_phone_24" />
 
     </RelativeLayout>

@@ -1,16 +1,19 @@
 package com.example.sikobeh;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginKoordinator extends AppCompatActivity {
 
@@ -18,6 +21,7 @@ public class LoginKoordinator extends AppCompatActivity {
     private EditText email, password;
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
+    private CheckBox lPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,16 @@ public class LoginKoordinator extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressbar);
+        lPassword = findViewById(R.id.lihatPassword);
+
+        lPassword.setOnClickListener(v -> {
+            if(lPassword.isChecked()){
+                password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            }
+            else {
+                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
 
         loginb.setOnClickListener(new View.OnClickListener() {
             @Override

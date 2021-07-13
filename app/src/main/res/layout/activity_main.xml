@@ -14,6 +14,7 @@
         android:textSize="50sp"
         android:textAlignment="center"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnSecondary"
         android:fontFamily="sans-serif-black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="Sistem Informasi Konsep Berita Harian"
         android:textSize="20sp"
+        android:textColor="?attr/colorOnSecondary"
         android:textAlignment="center"
         android:textStyle="bold"
         android:fontFamily="sans-serif-black"
@@ -45,9 +47,7 @@
         android:layout_marginTop="200dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:backgroundTint="#0000FF"
         android:text="Login Sebagai Koordinator"
-        android:textColor="#FFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -63,9 +63,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:backgroundTint="#0000FF"
         android:text="Login Sebagai Wartawan"
-        android:textColor="#FFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -73,5 +71,15 @@
         android:layout_centerInParent="true"
         android:layout_below="@id/LoginKoordinator"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textSize="12dp"
+        android:textColor="?attr/colorOnSecondary"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:text="©BanuaDev - Teknik Informatika 18"/>
 
 </RelativeLayout>

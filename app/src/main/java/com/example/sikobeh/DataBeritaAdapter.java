@@ -1,15 +1,22 @@
 package com.example.sikobeh;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
@@ -27,15 +34,27 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull DataBeritaAdapter.MyViewHolder holder, int position, @NonNull Berita model) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Berita model) {
         holder.judul.setText(model.getJudul());
         holder.deskripsi.setText(model.getDesc());
         holder.lokasi.setText(model.getLoc());
-        holder.tanggal.setText(model.getTimeupload());
+        holder.tanggal.setText(" " + model.getTimeupload() + " ");
 
         Glide.with(holder.fotoBerita.getContext()).load(model.getBeritaurl())
-                .placeholder(R.drawable.ic_baseline_add_photo_alternate_24)
-                .error(R.drawable.ic_baseline_account_circle_24).into(holder.fotoBerita);
+            .listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    holder.fotoBerita.setVisibility(View.VISIBLE);
+                    holder.progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            })
+            .error(R.drawable.ic_baseline_image_24_berita).into(holder.fotoBerita);
     }
 
     @NonNull
@@ -48,6 +67,8 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView judul, deskripsi, lokasi, tanggal;
         ImageView fotoBerita;
+        ProgressBar progressBar;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judultext);
@@ -55,6 +76,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             lokasi = itemView.findViewById(R.id.locberita);
             fotoBerita = itemView.findViewById(R.id.fotoberita);
             tanggal = itemView.findViewById(R.id.tanggal);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }
 
