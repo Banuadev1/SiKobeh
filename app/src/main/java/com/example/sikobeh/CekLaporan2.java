@@ -1,9 +1,5 @@
 package com.example.sikobeh;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +37,9 @@ public class CekLaporan2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cek_laporan2);
+
+        if (WartawanAdapter.clickBerita == true) { WartawanAdapter.clickBerita = false; }
+
         String value = getIntent().getStringExtra("key");
         String value2 = getIntent().getStringExtra("key2");
         recyclerView = findViewById(R.id.recview2);
@@ -58,7 +56,6 @@ public class CekLaporan2 extends AppCompatActivity {
         list = new ArrayList<>();
         beritaAdapter = new BeritaAdapter(this,list);
         recyclerView.setAdapter(beritaAdapter);
-        Collections.reverse(list);
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,6 +77,7 @@ public class CekLaporan2 extends AppCompatActivity {
                 }
 
                 beritaAdapter.notifyDataSetChanged();
+                Collections.reverse(list);
             }
 
             @Override
@@ -99,28 +97,8 @@ public class CekLaporan2 extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                SharedPreferences sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Logout Akun");
-                builder.setMessage("Apakah Anda Yakin Ingin Logout?");
-                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        editor.putInt("logged", 0);
-                        editor.apply();
-                        Intent intent = new Intent(CekLaporan2.this, LoginKoordinator.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create().show();
+            case R.id.menunav:
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,16 +1,19 @@
 package com.example.sikobeh;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +34,8 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     ArrayList<User> list;
     FirebaseAuth fAuth;
     StorageReference storageReference;
+    public static Boolean perintahDelete = false;
+    public static Boolean clickBerita = false;
 
     public WartawanAdapter(Context context, ArrayList<User> list) {
         this.context = context;
@@ -71,6 +76,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                 }
             }).error(R.drawable.ic_baseline_account_circle_24_white).into(holder.bimage);
         */
+
         StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -97,21 +103,49 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             }
         });
 
+        String value2 = holder.fullname.getText().toString().trim();
+
         holder.cardView.setOnClickListener(v -> {
-            String value2 = holder.fullname.getText().toString().trim();
             lihatBerita(value, value2);
         });
-        holder.fullname.setOnClickListener(v -> {
-            lihatBerita(value, holder.fullname.getText().toString().trim());
-        });
         holder.bimage.setOnClickListener(v -> {
-            lihatBerita(value, holder.fullname.getText().toString().trim());
+            lihatBerita(value, value2);
+        });
+        /*
+        holder.fullname.setOnClickListener(v -> {
+            lihatBerita(value, value2);
         });
         holder.pnumber.setOnClickListener(v -> {
-            lihatBerita(value, holder.fullname.getText().toString().trim());
+            lihatBerita(value, value2);
         });
         holder.email.setOnClickListener(v -> {
-            lihatBerita(value, holder.fullname.getText().toString().trim());
+            lihatBerita(value, value2);
+        });
+
+         */
+        holder.arrowBtn.setOnClickListener(v -> {
+            if (holder.deleteRl.getVisibility() == View.VISIBLE){
+                holder.deleteRl.setVisibility(View.GONE);
+            } else {
+                holder.deleteRl.setVisibility(View.VISIBLE);
+            }
+        });
+        holder.deleteBtn.setOnClickListener(v -> {
+            AlertDialog.Builder logout = new AlertDialog.Builder(context);
+            logout.setTitle("Logout Akun");
+            logout.setMessage("Apakah Anda yakin ingin menghapus data wartawan tersebut?");
+            logout.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteWartawan(value);
+                }
+            }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            logout.create().show();
         });
     }
 
@@ -124,8 +158,9 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
 
         TextView fullname, email, pnumber;
         CircleImageView bimage;
-        RelativeLayout cardView;
+        RelativeLayout cardView, deleteRl;
         ProgressBar progressBar;
+        Button arrowBtn, deleteBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -136,13 +171,29 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             bimage = (CircleImageView) itemView.findViewById(R.id.beritaImage);
             cardView = (RelativeLayout) itemView.findViewById(R.id.areaklik);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+            arrowBtn = itemView.findViewById(R.id.arrow_btn);
+            deleteBtn = itemView.findViewById(R.id.delete_btn);
+            deleteRl = itemView.findViewById(R.id.delete_rl);
         }
     }
 
     private void lihatBerita(String value, String value2){
-        Intent intent = new Intent(context, CekLaporan2.class);
-        intent.putExtra("key2", value2);
-        intent.putExtra("key", value);
-        context.startActivity(intent);
+        if (clickBerita == false){
+            clickBerita = true;
+            Intent intent = new Intent(context, CekLaporan2.class);
+            intent.putExtra("key2", value2);
+            intent.putExtra("key", value);
+            context.startActivity(intent);
+        }
     }
+
+    private void deleteWartawan(String value){
+        if (perintahDelete == false){
+            perintahDelete = true;
+            Intent intent = new Intent(context, CekLaporan.class);
+            intent.putExtra("deleteKey", value);
+            context.startActivity(intent);
+        }
+    }
+
 }

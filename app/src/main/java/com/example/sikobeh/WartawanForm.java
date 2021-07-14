@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +40,7 @@ public class WartawanForm extends AppCompatActivity {
     Toolbar toolBar;
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
+    LinearLayoutManager mLayoutManager;
     StorageReference storageReference;
     FirebaseUser user;
     DataBeritaAdapter dataBeritaAdapter;
@@ -59,6 +57,8 @@ public class WartawanForm extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         user = fAuth.getCurrentUser();
+        mLayoutManager = new LinearLayoutManager(WartawanForm.this);
+        mLayoutManager.setReverseLayout(true);
 
         setSupportActionBar(toolBar);
 
@@ -117,6 +117,8 @@ public class WartawanForm extends AppCompatActivity {
 
         dataBeritaAdapter = new DataBeritaAdapter(data);
         recyclerView.setAdapter(dataBeritaAdapter);
+        recyclerView.setLayoutManager(mLayoutManager);
+
 
         fLaporan.setOnClickListener((view) ->{
             startActivity(new Intent(getApplicationContext(), WartawanInputB.class));
@@ -158,8 +160,8 @@ public class WartawanForm extends AppCompatActivity {
             case R.id.logout:
                 AlertDialog.Builder logout = new AlertDialog.Builder(this);
                 logout.setTitle("Logout Akun");
-                logout.setMessage("Apakah Anda Yakin Ingin Logout?");
-                logout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                logout.setMessage("Apakah Anda yakin ingin logout?");
+                logout.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseAuth.getInstance().signOut();//logout
@@ -167,7 +169,7 @@ public class WartawanForm extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

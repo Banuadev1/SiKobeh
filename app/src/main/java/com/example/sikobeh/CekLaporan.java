@@ -1,25 +1,28 @@
 package com.example.sikobeh;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,41 @@ public class CekLaporan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cek_laporan);
+
+        if (WartawanAdapter.perintahDelete.equals(true)) {
+            String value3 = getIntent().getStringExtra("deleteKey");
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value3);
+            String uid = db.child("uid").toString();
+            FirebaseUser fr = FirebaseAuth.getInstance().getCurrentUser();
+            db.removeValue();
+            fr.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(CekLaporan.this, "Data Wartawan berhasil dihapus, memuat data kembali",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(CekLaporan.this, "Gagal menghapus data",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            StorageReference str = FirebaseStorage.getInstance().getReference().child("users/"+uid);
+            str.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(CekLaporan.this, "GAGAL",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+            WartawanAdapter.perintahDelete = false;
+        }
 
         toolbar = findViewById(R.id.toolbar2);
         recyclerView = findViewById(R.id.recview);
@@ -75,28 +113,8 @@ public class CekLaporan extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                SharedPreferences sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Logout Akun");
-                builder.setMessage("Apakah Anda Yakin Ingin Logout?");
-                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        editor.putInt("logged", 0);
-                        editor.apply();
-                        Intent intent = new Intent(CekLaporan.this, LoginKoordinator.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create().show();
+            case R.id.menunav:
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
