@@ -2,7 +2,7 @@ package com.example.sikobeh;
 
 public class User {
 
-    public String fullname, pnumber, email, uid, imageurl;
+    public String fullname, pnumber, email, password, uid, imageurl;
 
     public String getFullname() {
         return fullname;
@@ -44,16 +44,25 @@ public class User {
         this.imageurl = imageurl;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public User()
     {
 
     }
 
-    public User(String fullname, String pnumber, String email, String uid)
+    public User(String fullname, String pnumber, String email, String password, String uid)
     {
         this.fullname = fullname;
         this.pnumber = pnumber;
         this.email = email;
+        this.password = password;
         this.uid = uid;
     }
 }

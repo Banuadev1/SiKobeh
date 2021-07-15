@@ -11,14 +11,23 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
@@ -34,8 +43,9 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     ArrayList<User> list;
     FirebaseAuth fAuth;
     StorageReference storageReference;
-    public static Boolean perintahDelete = false;
+
     public static Boolean clickBerita = false;
+    public static Boolean bisakagakneh = false;
 
     public WartawanAdapter(Context context, ArrayList<User> list) {
         this.context = context;
@@ -60,40 +70,23 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        /*
-        Glide.with(holder.bimage.getContext()).load(user.getImageurl()).
-            listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    holder.progressBar.setVisibility(View.INVISIBLE);
-                    holder.bimage.setVisibility(View.VISIBLE);
-                    return false;
-                }
-            }).error(R.drawable.ic_baseline_account_circle_24_white).into(holder.bimage);
-        */
-
         StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).into(holder.bimage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            holder.progressBar.setVisibility(View.INVISIBLE);
-                            holder.bimage.setVisibility(View.VISIBLE);
-                        }
+                Picasso.get().load(uri).into(holder.bimage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.progressBar.setVisibility(View.INVISIBLE);
+                        holder.bimage.setVisibility(View.VISIBLE);
+                    }
 
-                        @Override
-                        public void onError(Exception e) {
-                            holder.progressBar.setVisibility(View.INVISIBLE);
-                            holder.bimage.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    @Override
+                    public void onError(Exception e) {
+                        holder.progressBar.setVisibility(View.INVISIBLE);
+                        holder.bimage.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -111,18 +104,6 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         holder.bimage.setOnClickListener(v -> {
             lihatBerita(value, value2);
         });
-        /*
-        holder.fullname.setOnClickListener(v -> {
-            lihatBerita(value, value2);
-        });
-        holder.pnumber.setOnClickListener(v -> {
-            lihatBerita(value, value2);
-        });
-        holder.email.setOnClickListener(v -> {
-            lihatBerita(value, value2);
-        });
-
-         */
         holder.arrowBtn.setOnClickListener(v -> {
             if (holder.deleteRl.getVisibility() == View.VISIBLE){
                 holder.deleteRl.setVisibility(View.GONE);
@@ -131,13 +112,64 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             }
         });
         holder.deleteBtn.setOnClickListener(v -> {
-            AlertDialog.Builder logout = new AlertDialog.Builder(context);
-            logout.setTitle("Logout Akun");
-            logout.setMessage("Apakah Anda yakin ingin menghapus data wartawan tersebut?");
-            logout.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder deleteBox = new AlertDialog.Builder(context);
+            deleteBox.setTitle("Hapus Wartawan");
+            deleteBox.setMessage("Apakah Anda yakin ingin menghapus wartawan ini?");
+            deleteBox.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    deleteWartawan(value);
+                    // Delete Storage
+                    // -> Users
+                    StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
+                    profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(context, "Menghapus Data Storage", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    });
+                    // -> DataBerita
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                    Query applesQuery = ref.child("DataBerita").child(value).orderByChild("beritaurl");
+
+                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
+                                        StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
+                                        ref2.delete();
+                                        if (!bisakagakneh){
+                                            bisakagakneh = true;
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    // Delete Authentication
+                    // ...
+
+                    // delete Realtime Database
+                    // DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
+                    // db.removeValue();
+
+                    Intent intent = new Intent(context, CekLaporan.class);
+                    intent.putExtra("refresh", bisakagakneh);
+                    context.startActivity(intent);
                 }
             }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                 @Override
@@ -145,7 +177,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
 
                 }
             });
-            logout.create().show();
+            deleteBox.create().show();
         });
     }
 
@@ -183,15 +215,6 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             Intent intent = new Intent(context, CekLaporan2.class);
             intent.putExtra("key2", value2);
             intent.putExtra("key", value);
-            context.startActivity(intent);
-        }
-    }
-
-    private void deleteWartawan(String value){
-        if (perintahDelete == false){
-            perintahDelete = true;
-            Intent intent = new Intent(context, CekLaporan.class);
-            intent.putExtra("deleteKey", value);
             context.startActivity(intent);
         }
     }

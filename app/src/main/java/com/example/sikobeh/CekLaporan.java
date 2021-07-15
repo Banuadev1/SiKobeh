@@ -1,8 +1,10 @@
 package com.example.sikobeh;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,18 +13,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -33,47 +28,21 @@ public class CekLaporan extends AppCompatActivity {
     WartawanAdapter wartawanAdapter;
     ArrayList<User> list;
     Toolbar toolbar;
+    Button btnHapus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cek_laporan);
 
-        if (WartawanAdapter.perintahDelete.equals(true)) {
-            String value3 = getIntent().getStringExtra("deleteKey");
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value3);
-            String uid = db.child("uid").toString();
-            FirebaseUser fr = FirebaseAuth.getInstance().getCurrentUser();
-            db.removeValue();
-            fr.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(CekLaporan.this, "Data Wartawan berhasil dihapus, memuat data kembali",
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(CekLaporan.this, "Gagal menghapus data",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+        String refresh = getIntent().getStringExtra("refresh");
 
-            StorageReference str = FirebaseStorage.getInstance().getReference().child("users/"+uid);
-            str.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(CekLaporan.this, "GAGAL",
-                            Toast.LENGTH_LONG).show();
-                }
-            });
-            WartawanAdapter.perintahDelete = false;
+        if (refresh == "true"){
+            Toast.makeText(CekLaporan.this, "Memuat kembali data..", Toast.LENGTH_LONG);
+            finish();
         }
 
+        btnHapus = findViewById(R.id.delete_btn);
         toolbar = findViewById(R.id.toolbar2);
         recyclerView = findViewById(R.id.recview);
         database = FirebaseDatabase.getInstance().getReference("Users");
@@ -117,5 +86,14 @@ public class CekLaporan extends AppCompatActivity {
                 onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void restartAct(){
+        if (WartawanAdapter.bisakagakneh){
+            WartawanAdapter.bisakagakneh = false;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +41,7 @@ public class WartawanForm extends AppCompatActivity {
     ExtendedFloatingActionButton fLaporan;
     Calendar calendar;
     Toolbar toolBar;
+    TextView jikaKosong;
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
     LinearLayoutManager mLayoutManager;
@@ -49,6 +53,8 @@ public class WartawanForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wartawan_form);
+
+        jikaKosong = findViewById(R.id.idKosongW);
         calendar = Calendar.getInstance();
         fLaporan = findViewById(R.id.bukaFLaporan);
         toolBar = findViewById(R.id.toolbar);
@@ -70,38 +76,64 @@ public class WartawanForm extends AppCompatActivity {
         String getMonth = datetime.substring(3, 5);
         
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        Query applesQuery = ref.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataBerita").orderByChild("month").equalTo(getPreviousMonth(getMonth));
+        DatabaseReference dbbanana = FirebaseDatabase.getInstance().getReference("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Query applesQuery = ref.child("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("month").equalTo(getPreviousMonth(getMonth));
 
-        Toast.makeText(WartawanForm.this, "Memeriksa data lama..", Toast.LENGTH_LONG).show();
+        Boolean[] bisakagakneh = {false, false};
+        dbbanana.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                snapshot.getRef().get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        jikaKosong.setVisibility(View.INVISIBLE);
+                        bisakagakneh[1] = true;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        jikaKosong.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Toast.makeText(WartawanForm.this, "Memeriksa berita..", Toast.LENGTH_LONG).show();
         applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                final Boolean[] bisakagakneh = {false, true};
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
                             StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
-                            ref2.delete();
-
-                            if (!bisakagakneh[0]){
-                                bisakagakneh[0] = true;
-                            }
+                            ref2.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    bisakagakneh[0] = true;
+                                }
+                            });
                         }
                     });
                 }
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 if (bisakagakneh[0]) {
-                    Toast.makeText(WartawanForm.this, "Berhasil membersihkan data lama", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WartawanForm.this, "Berhasil membersihkan berita lama", Toast.LENGTH_LONG).show();
                 } else {
                     if (bisakagakneh[1]) {
-                        Toast.makeText(WartawanForm.this, "Data lama tidak ada", Toast.LENGTH_LONG).show();
-                        bisakagakneh[1] = false;
+                        Toast.makeText(WartawanForm.this, "Berita lama tidak ada", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(WartawanForm.this, "Belum ada berita", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -113,7 +145,7 @@ public class WartawanForm extends AppCompatActivity {
         });
 
         FirebaseRecyclerOptions<Berita> data = new FirebaseRecyclerOptions.Builder<Berita>()
-                .setQuery((Query) FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("DataBerita"), Berita.class)
+                .setQuery((Query) FirebaseDatabase.getInstance().getReference("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid()), Berita.class)
                 .build();
 
         dataBeritaAdapter = new DataBeritaAdapter(data);

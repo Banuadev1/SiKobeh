@@ -1,7 +1,6 @@
 package com.example.sikobeh;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -110,7 +109,6 @@ public class LoginWartawan extends AppCompatActivity {
                     password.setText("");
                     Toast.makeText(LoginWartawan.this, "Anda Berhasil Login", Toast.LENGTH_LONG).show();
                     openafterLogin();
-
                 }
                 else
                 {

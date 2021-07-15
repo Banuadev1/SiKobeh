@@ -1,9 +1,5 @@
 package com.example.sikobeh;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -11,14 +7,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,9 +61,8 @@ public class UbahDataBerita extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
-        reference = FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("DataBerita").child(valueKey);
+        reference = FirebaseDatabase.getInstance().getReference("DataBerita")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(valueKey);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -141,8 +137,8 @@ public class UbahDataBerita extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Sedang Mengganti Gambar Berita..");;
         pd.show();
-        final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
-                .getUid()).child("photoBerita/" + Name);
+        final StorageReference fileRef = storageReference.child("databerita/"+auth.getCurrentUser()
+                .getUid()).child(Name);
         fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
                 getUrl = task.getResult().toString();

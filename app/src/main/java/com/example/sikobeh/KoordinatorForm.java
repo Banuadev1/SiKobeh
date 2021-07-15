@@ -38,7 +38,7 @@ public class KoordinatorForm extends AppCompatActivity {
         laporan = findViewById(R.id.cekLaporan);
         logout = findViewById(R.id.logOutKoordinator);
 
-        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference = FirebaseDatabase.getInstance().getReference("DataBerita");
 
 
         register.setOnClickListener(new View.OnClickListener() {

@@ -78,7 +78,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             super(itemView);
             judul = itemView.findViewById(R.id.judultext);
             ubah = itemView.findViewById(R.id.ubahBerita);
-            ubah.setVisibility(View.INVISIBLE);
+            ubah.setVisibility(View.GONE);
             loc = itemView.findViewById(R.id.locberita);
             desc = itemView.findViewById(R.id.descberita);
             tanggal = itemView.findViewById(R.id.tanggal);

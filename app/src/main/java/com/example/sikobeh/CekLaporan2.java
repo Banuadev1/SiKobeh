@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,7 +47,7 @@ public class CekLaporan2 extends AppCompatActivity {
         jikaKosong = findViewById(R.id.idKosong);
         ket2 = findViewById(R.id.ket2_berita);
         ket2.setText("Berita dari " + value2);
-        database = FirebaseDatabase.getInstance().getReference("Users").child(value).child("DataBerita");
+        database = FirebaseDatabase.getInstance().getReference("DataBerita").child(value);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

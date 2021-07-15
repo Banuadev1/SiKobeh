@@ -8,19 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +37,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class WartawanInputB extends AppCompatActivity {
     public static final int GALLERY_REQUEST_CODE = 105;
@@ -128,11 +123,10 @@ public class WartawanInputB extends AppCompatActivity {
         pd.setTitle("Sedang Mengupload Data...");
         pd.show();
         final DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                .getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("DataBerita").push();
+                .getReference("DataBerita")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         final StorageReference Reference = storageReference
-                .child("users/"+auth.getCurrentUser().getUid()).child("photoBerita/"+Name);
+                .child("databerita/"+auth.getCurrentUser().getUid()).child(Name);
         Reference.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
