@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Update Berita"
+        android:background="@color/purple_500"
+        android:layout_centerHorizontal="true"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:scrollbars="vertical"
+        android:textColor="#fff"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Judul :"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/judulB"
+                android:inputType="textMultiLine"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi :"
+                android:layout_below="@id/judulB"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/judulB"
+                android:id="@+id/deskB"
+                android:layout_marginTop="20dp"
+                android:inputType="textMultiLine"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lokasi :"
+                android:layout_below="@id/deskB"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/locB"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/deskB"
+                android:inputType="textMultiLine"
+                android:layout_centerHorizontal="true"
+                android:textSize="20sp"/>
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Ubah"
+                android:id="@+id/usubmit"
+                android:background="@color/purple_500"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_below="@id/ubahGambar"
+                android:layout_centerHorizontal="true"
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <ImageView
+                android:background="@drawable/squere_border"
+                android:padding="5dp"
+                android:id="@+id/ubahGambar"
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:layout_below="@id/locB"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                android:scaleType="fitCenter" />
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

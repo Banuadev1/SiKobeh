@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,11 +71,14 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView judul, loc, desc, tanggal;
         ImageView fotoBerita;
+        Button ubah;
         ProgressBar progressBar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judultext);
+            ubah = itemView.findViewById(R.id.ubahBerita);
+            ubah.setVisibility(View.INVISIBLE);
             loc = itemView.findViewById(R.id.locberita);
             desc = itemView.findViewById(R.id.descberita);
             tanggal = itemView.findViewById(R.id.tanggal);

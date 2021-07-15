@@ -3,6 +3,16 @@ package com.example.sikobeh;
 public class Berita {
 
     public String desc;
+    public String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String judul;
     public String loc;
     public String beritaurl;
@@ -11,12 +21,13 @@ public class Berita {
     public Berita() {
     }
 
-    public Berita(String desc, String judul, String loc, String beritaurl, String timeupload) {
+    public Berita(String desc, String judul, String loc, String beritaurl, String timeupload, String key) {
         this.desc = desc;
         this.judul = judul;
         this.loc = loc;
         this.beritaurl = beritaurl;
         this.timeupload = timeupload;
+        this.key = key;
     }
 
     public String getDesc() {

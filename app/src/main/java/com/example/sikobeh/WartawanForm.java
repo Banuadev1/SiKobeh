@@ -59,6 +59,7 @@ public class WartawanForm extends AppCompatActivity {
         user = fAuth.getCurrentUser();
         mLayoutManager = new LinearLayoutManager(WartawanForm.this);
         mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
         setSupportActionBar(toolBar);
 

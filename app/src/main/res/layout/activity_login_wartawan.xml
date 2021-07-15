@@ -6,6 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".LoginWartawan">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/view5"
+        android:background="?attr/colorPrimary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/view5"
+        android:background="@drawable/ic_wave_1"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_baseline_person_24_white"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wartawan"
+        android:textSize="30dp"
+        android:layout_margin="30dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

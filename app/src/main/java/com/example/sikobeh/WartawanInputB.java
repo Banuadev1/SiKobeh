@@ -127,6 +127,10 @@ public class WartawanInputB extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Sedang Mengupload Data...");
         pd.show();
+        final DatabaseReference reference1 = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("DataBerita").push();
         final StorageReference Reference = storageReference
                 .child("users/"+auth.getCurrentUser().getUid()).child("photoBerita/"+Name);
         Reference.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -139,6 +143,7 @@ public class WartawanInputB extends AppCompatActivity {
                             String getURL = task.getResult().toString();
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
                             String datetime = simpleDateFormat.format(calendar.getTime());
+                            String keyB = reference1.getKey();
                             Map<String, Object> map = new HashMap<>();
                             map.put("judul", judulB);
                             map.put("desc", descB);
@@ -146,9 +151,8 @@ public class WartawanInputB extends AppCompatActivity {
                             map.put("beritaurl", getURL);
                             map.put("timeupload", datetime);
                             map.put("month", datetime.substring(3, 5));
-                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child("DataBerita").push()
-                                    .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            map.put("key", keyB);
+                            reference1.setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     judul.setText("");
