@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,7 +47,6 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     StorageReference storageReference;
 
     public static Boolean clickBerita = false;
-    public static Boolean bisakagakneh = false;
 
     public WartawanAdapter(Context context, ArrayList<User> list) {
         this.context = context;
@@ -66,6 +67,8 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         holder.email.setText(user.getEmail());
         holder.pnumber.setText(user.getPnumber());
         String value = user.getUid();
+        String email = user.getEmail();
+        String pass = user.getPassword();
 
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -112,72 +115,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             }
         });
         holder.deleteBtn.setOnClickListener(v -> {
-            AlertDialog.Builder deleteBox = new AlertDialog.Builder(context);
-            deleteBox.setTitle("Hapus Wartawan");
-            deleteBox.setMessage("Apakah Anda yakin ingin menghapus wartawan ini?");
-            deleteBox.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Delete Storage
-                    // -> Users
-                    StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
-                    profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(context, "Menghapus Data Storage", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    });
-                    // -> DataBerita
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                    Query applesQuery = ref.child("DataBerita").child(value).orderByChild("beritaurl");
-
-                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
-                                        StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
-                                        ref2.delete();
-                                        if (!bisakagakneh){
-                                            bisakagakneh = true;
-                                        }
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
-                    // Delete Authentication
-                    // ...
-
-                    // delete Realtime Database
-                    // DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
-                    // db.removeValue();
-
-                    Intent intent = new Intent(context, CekLaporan.class);
-                    intent.putExtra("refresh", bisakagakneh);
-                    context.startActivity(intent);
-                }
-            }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            deleteBox.create().show();
+            deleteWartawan(value, email, pass);
         });
     }
 
@@ -217,6 +155,96 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
             intent.putExtra("key", value);
             context.startActivity(intent);
         }
+    }
+
+    private void deleteWartawan(String value, String email, String pass){
+        AlertDialog.Builder deleteBox = new AlertDialog.Builder(context);
+        deleteBox.setTitle("Hapus Wartawan");
+        deleteBox.setMessage("Apakah Anda yakin ingin menghapus wartawan ini?");
+        deleteBox.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Delete Storage
+                // -> Users
+                StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
+                profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context, "Menghapus Data Storage", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+                // -> DataBerita
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                Query applesQuery = ref.child("DataBerita").child(value).orderByChild("beritaurl");
+
+                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                            dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
+                                    StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
+                                    ref2.delete();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                // Delete Authentication
+                FirebaseAuth.getInstance().signOut(); // Hapus jika jika poin 3 kendala terpenuhi
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(),pass.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(context, "Berhasil LOGIN", Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(context, "Berhasil HAPUS", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                // delete Realtime Database
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
+                db.removeValue();
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(context, "Memuat kembali data..", Toast.LENGTH_LONG);
+                notifyDataSetChanged();
+            }
+        }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        deleteBox.create().show();
     }
 
 }

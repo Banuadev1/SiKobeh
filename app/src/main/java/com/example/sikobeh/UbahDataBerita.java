@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +40,7 @@ public class UbahDataBerita extends AppCompatActivity {
 
     EditText judulberita, deskripsiberita, lokasiberita;
     ImageView gambarberita;
-    Button submit;
+    Button submit, cancel;
     StorageReference storageReference;
     String getUrl;
     String imageFilename;
@@ -56,6 +57,7 @@ public class UbahDataBerita extends AppCompatActivity {
         lokasiberita = findViewById(R.id.locB);
         gambarberita = findViewById(R.id.ubahGambar);
         submit = findViewById(R.id.usubmit);
+        cancel = findViewById(R.id.btnback);
 
         String valueKey = getIntent().getStringExtra("key");
 
@@ -71,6 +73,7 @@ public class UbahDataBerita extends AppCompatActivity {
                 String dBerita = snapshot.child("desc").getValue().toString();
                 String lBerita = snapshot.child("loc").getValue().toString();
                 String gBerita = snapshot.child("beritaurl").getValue().toString();
+                getUrl = snapshot.child("beritaurl").getValue().toString();
 
                 judulberita.setText(jBerita);
                 deskripsiberita.setText(dBerita);
@@ -82,6 +85,10 @@ public class UbahDataBerita extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+
+        cancel.setOnClickListener(v -> {
+            onBackPressed();
         });
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +121,6 @@ public class UbahDataBerita extends AppCompatActivity {
                 startActivityForResult(openGalleryIntent,1000);
             }
         });
-
     }
 
     @Override
@@ -130,6 +136,16 @@ public class UbahDataBerita extends AppCompatActivity {
 
                 uploadDataToFirebase(imageFilename, imageUri);
             }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(UbahDataBerita.this, LoginWartawan.class));
+            finish();
         }
     }
 
@@ -154,6 +170,7 @@ public class UbahDataBerita extends AppCompatActivity {
                     Toast.makeText(UbahDataBerita.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
                 });
     }
+
     private String getFileExt(Uri contentUri) {
         ContentResolver c = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();

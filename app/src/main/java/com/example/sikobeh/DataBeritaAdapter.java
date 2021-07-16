@@ -90,7 +90,6 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             fotoBerita = itemView.findViewById(R.id.fotoberita);
             tanggal = itemView.findViewById(R.id.tanggal);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
-
         }
     }
 }

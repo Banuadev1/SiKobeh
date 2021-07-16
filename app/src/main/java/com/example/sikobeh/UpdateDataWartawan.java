@@ -144,4 +144,14 @@ public class UpdateDataWartawan extends AppCompatActivity {
                     Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(UpdateDataWartawan.this, LoginWartawan.class));
+            finish();
+        }
+    }
 }

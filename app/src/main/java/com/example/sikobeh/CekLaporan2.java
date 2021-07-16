@@ -76,7 +76,6 @@ public class CekLaporan2 extends AppCompatActivity {
                     Berita berita = dataSnapshot.getValue(Berita.class);
                     list.add(berita);
                 }
-
                 beritaAdapter.notifyDataSetChanged();
                 Collections.reverse(list);
             }

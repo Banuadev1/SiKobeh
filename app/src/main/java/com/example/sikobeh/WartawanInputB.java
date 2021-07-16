@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -155,6 +157,9 @@ public class WartawanInputB extends AppCompatActivity {
                                     pBerita.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
                                     Toast.makeText(WartawanInputB.this, "Upload Berita Berhasil", Toast.LENGTH_SHORT).show();
                                     pd.dismiss();
+                                    if  (WartawanForm.jikaKosong.getVisibility() == View.VISIBLE) {
+                                        WartawanForm.jikaKosong.setVisibility(View.INVISIBLE);
+                                    }
                                 }
                             });
                         }
@@ -193,6 +198,16 @@ public class WartawanInputB extends AppCompatActivity {
                 Picasso.get().load(imageUri).into(pBerita);
             }
 
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(WartawanInputB.this, LoginWartawan.class));
+            finish();
         }
     }
 

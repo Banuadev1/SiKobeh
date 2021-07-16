@@ -17,9 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,7 +39,7 @@ public class WartawanForm extends AppCompatActivity {
     ExtendedFloatingActionButton fLaporan;
     Calendar calendar;
     Toolbar toolBar;
-    TextView jikaKosong;
+    public static TextView jikaKosong;
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
     LinearLayoutManager mLayoutManager;
@@ -70,79 +68,7 @@ public class WartawanForm extends AppCompatActivity {
         setSupportActionBar(toolBar);
 
         // TAMBAHAN DIGIT UNTUK HAPUS DATA OTOMATIS
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-        String datetime = simpleDateFormat.format(calendar.getTime());
-        String getMonth = datetime.substring(3, 5);
-        
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference dbbanana = FirebaseDatabase.getInstance().getReference("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Query applesQuery = ref.child("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("month").equalTo(getPreviousMonth(getMonth));
-
-        Boolean[] bisakagakneh = {false, false};
-        dbbanana.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                snapshot.getRef().get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        jikaKosong.setVisibility(View.INVISIBLE);
-                        bisakagakneh[1] = true;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        jikaKosong.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        Toast.makeText(WartawanForm.this, "Memeriksa berita..", Toast.LENGTH_LONG).show();
-        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
-                            StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
-                            ref2.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    bisakagakneh[0] = true;
-                                }
-                            });
-                        }
-                    });
-                }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (bisakagakneh[0]) {
-                    Toast.makeText(WartawanForm.this, "Berhasil membersihkan berita lama", Toast.LENGTH_LONG).show();
-                } else {
-                    if (bisakagakneh[1]) {
-                        Toast.makeText(WartawanForm.this, "Berita lama tidak ada", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(WartawanForm.this, "Belum ada berita", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(WartawanForm.this, "Gagal membersihkan data lama", Toast.LENGTH_LONG).show();
-            }
-        });
+        autoDelete();
 
         FirebaseRecyclerOptions<Berita> data = new FirebaseRecyclerOptions.Builder<Berita>()
                 .setQuery((Query) FirebaseDatabase.getInstance().getReference("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid()), Berita.class)
@@ -217,6 +143,11 @@ public class WartawanForm extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         dataBeritaAdapter.startListening();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(WartawanForm.this, LoginWartawan.class));
+            finish();
+        }
 
     }
 
@@ -226,4 +157,80 @@ public class WartawanForm extends AppCompatActivity {
         dataBeritaAdapter.stopListening();
     }
 
+    public void delayRefresh(){
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void autoDelete(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+        String datetime = simpleDateFormat.format(calendar.getTime());
+        String getMonth = datetime.substring(3, 5);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DataBerita");
+        DatabaseReference refData = ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Query applesQuery = ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("month").equalTo(getPreviousMonth(getMonth));
+
+        Toast.makeText(WartawanForm.this, "Memeriksa berita..", Toast.LENGTH_LONG).show();
+        delayRefresh();
+        refData.getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getChildrenCount() > 0){
+                    jikaKosong.setVisibility(View.INVISIBLE);
+                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.getChildrenCount() < 1){
+                                Toast.makeText(WartawanForm.this, "Berita lama tidak ada", Toast.LENGTH_LONG).show();
+                            } else {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
+                                            StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
+                                            ref2.delete();
+                                            //
+                                            applesQuery.getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if (snapshot.getChildrenCount() < 1) {
+                                                        jikaKosong.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                            Toast.makeText(WartawanForm.this, "Membersihkan berita lama", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(WartawanForm.this, "Gagal membersihkan data lama", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    jikaKosong.setVisibility(View.VISIBLE);
+                    Toast.makeText(WartawanForm.this, "Berita kosong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                jikaKosong.setVisibility(View.VISIBLE);
+                Toast.makeText(WartawanForm.this, "Berita kosong", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

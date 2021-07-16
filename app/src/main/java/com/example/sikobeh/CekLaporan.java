@@ -1,11 +1,9 @@
 package com.example.sikobeh;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,13 +32,6 @@ public class CekLaporan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cek_laporan);
-
-        String refresh = getIntent().getStringExtra("refresh");
-
-        if (refresh == "true"){
-            Toast.makeText(CekLaporan.this, "Memuat kembali data..", Toast.LENGTH_LONG);
-            finish();
-        }
 
         btnHapus = findViewById(R.id.delete_btn);
         toolbar = findViewById(R.id.toolbar2);
@@ -86,14 +77,5 @@ public class CekLaporan extends AppCompatActivity {
                 onBackPressed();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void restartAct(){
-        if (WartawanAdapter.bisakagakneh){
-            WartawanAdapter.bisakagakneh = false;
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
     }
 }

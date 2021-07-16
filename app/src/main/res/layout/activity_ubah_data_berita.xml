@@ -9,12 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Update Berita"
-        android:background="@color/purple_500"
+        android:background="?attr/colorPrimary"
         android:layout_centerHorizontal="true"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:gravity="center"
         android:scrollbars="vertical"
-        android:textColor="#fff"/>
+        android:layout_marginBottom="10dp"
+        android:textColor="?attr/colorOnPrimary"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,14 +30,16 @@
                 android:layout_height="wrap_content"
                 android:text="Judul :"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"/>
-
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="20dp"
+                android:id="@+id/add_judul"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_below="@id/add_judul"
+                android:layout_marginHorizontal="10dp"
                 android:id="@+id/judulB"
                 android:inputType="textMultiLine"
                 android:textSize="20dp"/>
@@ -46,15 +50,17 @@
                 android:text="Deskripsi :"
                 android:layout_below="@id/judulB"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="20dp"
+                android:id="@+id/add_desc"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/judulB"
+                android:layout_below="@id/add_desc"
                 android:id="@+id/deskB"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
                 android:inputType="textMultiLine"
                 android:textSize="20sp"/>
 
@@ -64,32 +70,19 @@
                 android:text="Lokasi :"
                 android:layout_below="@id/deskB"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="20dp"
+                android:id="@+id/add_loc"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/locB"
-                android:layout_marginTop="20dp"
-                android:layout_below="@id/deskB"
+                android:layout_marginHorizontal="10dp"
+                android:layout_below="@id/add_loc"
                 android:inputType="textMultiLine"
                 android:layout_centerHorizontal="true"
                 android:textSize="20sp"/>
-            <Button
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:text="Ubah"
-                android:id="@+id/usubmit"
-                android:background="@color/purple_500"
-                android:textColor="#fff"
-                android:layout_gravity="center"
-                android:layout_below="@id/ubahGambar"
-                android:layout_centerHorizontal="true"
-                android:textSize="17sp"
-                android:textAllCaps="false"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                />
 
             <ImageView
                 android:background="@drawable/squere_border"
@@ -99,9 +92,36 @@
                 android:layout_height="150dp"
                 android:layout_below="@id/locB"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:src="@drawable/ic_baseline_add_photo_alternate_24"
                 android:scaleType="fitCenter" />
+
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Ubah"
+                android:id="@+id/usubmit"
+                android:layout_gravity="center"
+                android:layout_below="@id/ubahGambar"
+                android:layout_centerHorizontal="true"
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Batal"
+                android:id="@+id/btnback"
+                android:backgroundTint="#c3181e"
+                android:layout_gravity="center"
+                android:layout_below="@id/usubmit"
+                android:layout_centerHorizontal="true"
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>
