@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -39,6 +40,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import es.dmoral.toasty.Toasty;
 
 public class WartawanInputB extends AppCompatActivity {
     public static final int GALLERY_REQUEST_CODE = 105;
@@ -103,27 +107,30 @@ public class WartawanInputB extends AppCompatActivity {
         String locB = loc.getText().toString();
 
         if(judulB.isEmpty()){
-            judul.setError("Judul Berita Tidak Boleh Kosong!!");
+            Toasty.error(this, "Judul Berita Tidak Boleh Kosong!!", Toast.LENGTH_SHORT, true).show();
             judul.requestFocus();
             return;
         }
         if(descB.isEmpty()){
-            desc.setError("Deskripsi Berita Tidak Boleh Kosong!!");
+            Toasty.error(this, "Deskripsi Berita Tidak Boleh Kosong!!", Toast.LENGTH_SHORT, true).show();
             desc.requestFocus();
             return;
         }
         if(locB.isEmpty()){
-            loc.setError("Lokasi Berita Tidak Boleh Kosong!!");
+            Toasty.error(this, "Lokasi Berita Tidak Boleh Kosong", Toast.LENGTH_SHORT, true).show();
             loc.requestFocus();
             return;
         }
         if(imageUri == null){
-            Toast.makeText(this, "Gambar Untuk Data Berita Belum Dimasukkan!!", Toast.LENGTH_SHORT).show();
+            Toasty.error(this, "Gambar Untuk Data Berita Belum Dimasukkan!!", Toast.LENGTH_SHORT, true).show();
             return;
         }
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setTitle("Sedang Mengupload Data...");
-        pd.show();
+        final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setCancelable(false);
+        final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Berhasil")
+                .setContentText("Data Berita Berhasil Di Inputkan!");
         final DatabaseReference reference1 = FirebaseDatabase.getInstance()
                 .getReference("DataBerita")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
@@ -155,8 +162,8 @@ public class WartawanInputB extends AppCompatActivity {
                                     desc.setText("");
                                     loc.setText("");
                                     pBerita.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
-                                    Toast.makeText(WartawanInputB.this, "Upload Berita Berhasil", Toast.LENGTH_SHORT).show();
-                                    pd.dismiss();
+                                    sweetAlertDialog.show();
+                                    pDialog.dismiss();
                                     if  (WartawanForm.jikaKosong.getVisibility() == View.VISIBLE) {
                                         WartawanForm.jikaKosong.setVisibility(View.INVISIBLE);
                                     }
@@ -165,13 +172,14 @@ public class WartawanInputB extends AppCompatActivity {
                         }
                         else{
                             Toast.makeText(WartawanInputB.this, "Gagal Upload Data Berita!", Toast.LENGTH_SHORT).show();
-                            pd.dismiss();
+                            pDialog.dismiss();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(WartawanInputB.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
                     }
                 });
             }
@@ -179,7 +187,8 @@ public class WartawanInputB extends AppCompatActivity {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                 double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                pd.setMessage("Mohon Tunggu.." + (int) progressPercent + "%");
+                pDialog.setTitleText("Mohon Tunggu.."+ (int) progressPercent + "%");
+                pDialog.show();
             }
         });
     }

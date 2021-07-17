@@ -18,6 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import es.dmoral.toasty.Toasty;
+
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
 
     private TextView banner, registeruser;
@@ -105,20 +107,20 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                Toast.makeText(RegisterUser.this, "User has been registered!!", Toast.LENGTH_LONG).show();
+                                Toasty.success(RegisterUser.this, "Akun Berhasil Di Daftarkan!", Toast.LENGTH_LONG, true).show();
                                 progressBar.setVisibility(View.GONE);
                                 editTextfullname.setText("");
                                 editTextemail.setText("");
                                 editTextage.setText("");
                                 editTextpassword.setText("");
                             }else{
-                                Toast.makeText(RegisterUser.this, "Failed Registered!!", Toast.LENGTH_LONG).show();
+                                Toasty.error(RegisterUser.this, "Akun Gagal Terdaftar!!", Toast.LENGTH_LONG, true).show();
                                 progressBar.setVisibility(View.GONE);
                             }
                         }
                     });
                 }else {
-                    Toast.makeText(RegisterUser.this, "Failed Registered!!", Toast.LENGTH_LONG).show();
+                    Toasty.error(RegisterUser.this, "Akun Gagal Terdaftar!!", Toast.LENGTH_LONG, true).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }

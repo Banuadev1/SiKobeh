@@ -37,7 +37,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyViewHolder>  {
 
@@ -135,12 +137,12 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            fullname = (TextView) itemView.findViewById(R.id.fullname);
-            email = (TextView) itemView.findViewById(R.id.email);
-            pnumber = (TextView) itemView.findViewById(R.id.pnumber);
-            bimage = (CircleImageView) itemView.findViewById(R.id.beritaImage);
-            cardView = (RelativeLayout) itemView.findViewById(R.id.areaklik);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+            fullname = itemView.findViewById(R.id.fullname);
+            email =  itemView.findViewById(R.id.email);
+            pnumber =  itemView.findViewById(R.id.pnumber);
+            bimage = itemView.findViewById(R.id.beritaImage);
+            cardView = itemView.findViewById(R.id.areaklik);
+            progressBar = itemView.findViewById(R.id.progressBar1);
             arrowBtn = itemView.findViewById(R.id.arrow_btn);
             deleteBtn = itemView.findViewById(R.id.delete_btn);
             deleteRl = itemView.findViewById(R.id.delete_rl);
@@ -158,93 +160,95 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     }
 
     private void deleteWartawan(String value, String email, String pass){
-        AlertDialog.Builder deleteBox = new AlertDialog.Builder(context);
-        deleteBox.setTitle("Hapus Wartawan");
-        deleteBox.setMessage("Apakah Anda yakin ingin menghapus wartawan ini?");
-        deleteBox.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Delete Storage
-                // -> Users
-                StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
-                profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        dialog.setTitle("Hapus Wartawan!");
+        dialog.setContentText("Apakah Anda yakin ingin menghapus wartawan ini?");
+        dialog.setConfirmText("Lanjut!")
+                .setCancelText("Batal")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onSuccess(Uri uri) {
-                        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        // Delete Storage
+                        // -> Users
+                        StorageReference profileRef = storageReference.child("users/"+value+"/profile.jpg");
+                        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(context, "Menghapus Data Storage", Toast.LENGTH_LONG).show();
+                            public void onSuccess(Uri uri) {
+                                profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+
+                                    }
+                                });
                             }
                         });
-                    }
-                });
-                // -> DataBerita
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                Query applesQuery = ref.child("DataBerita").child(value).orderByChild("beritaurl");
-
-                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                            dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
-                                    StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
-                                    ref2.delete();
+                        // -> DataBerita
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                        Query applesQuery = ref.child("DataBerita").child(value).orderByChild("beritaurl");
+                        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                                    dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            String urlGambar = dataSnapshot.child("beritaurl").getValue().toString();
+                                            StorageReference ref2 = FirebaseStorage.getInstance().getReferenceFromUrl(urlGambar);
+                                            ref2.delete();
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    }
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
-
-                // Delete Authentication
-                FirebaseAuth.getInstance().signOut(); // Hapus jika jika poin 3 kendala terpenuhi
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(),pass.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(context, "Berhasil LOGIN", Toast.LENGTH_LONG).show();
-                            FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        Toast.makeText(context, "Berhasil HAPUS", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                    }
+                            }
+                        });
+                        // Delete Authentication
+                        FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(),pass.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                               dialog.setTitle("Terhapus!");
+                                               dialog.setContentText("Wartawan Berhasil Terhapus!")
+                                                       .setConfirmText("Oke")
+                                                       .setConfirmClickListener(null)
+                                                       .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                            } else {
+                                                Toasty.error(context, task.getException().getMessage(), Toast.LENGTH_LONG, true).show();
+                                            }
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                else {
+                                    Toasty.error(context, task.getException().getMessage(), Toast.LENGTH_LONG, true).show();
+                                }
+                            }
+                        });
+                        // delete Realtime Database
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
+                        db.removeValue();
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+                        Toasty.info(context, "Memuat kembali data..", Toast.LENGTH_SHORT, true).show();
+                        notifyDataSetChanged();
                     }
-                });
-
-                // delete Realtime Database
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
-                db.removeValue();
-
-                try {
-                    TimeUnit.MILLISECONDS.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(context, "Memuat kembali data..", Toast.LENGTH_LONG);
-                notifyDataSetChanged();
-            }
-        }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                }).setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+             dialog.cancel();
             }
-        });
-        deleteBox.create().show();
-    }
+        }).show();
+
+        }
 
 }

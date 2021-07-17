@@ -1,7 +1,9 @@
 package com.example.sikobeh;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,10 +34,15 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.shashank.sony.fancydialoglib.Animation;
+import com.shashank.sony.fancydialoglib.FancyAlertDialog;
+import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class WartawanForm extends AppCompatActivity {
 
@@ -117,24 +127,26 @@ public class WartawanForm extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), CheckProfilWartawan.class));
                 return true;
             case R.id.logout:
-                AlertDialog.Builder logout = new AlertDialog.Builder(this);
-                logout.setTitle("Logout Akun");
-                logout.setMessage("Apakah Anda yakin ingin logout?");
-                logout.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+                alertDialog.setTitle("Logout Akun!");
+                alertDialog.setContentText("Apakah Yakin Ingin Logout?")
+                        .setConfirmText("Lanjut")
+                        .setCancelText("Batal")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                FirebaseAuth.getInstance().signOut();//logout
+                                Intent intent = new Intent(WartawanForm.this, LoginWartawan.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();//logout
-                        Intent intent = new Intent(WartawanForm.this, LoginWartawan.class);
-                        startActivity(intent);
-                        finish();
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        alertDialog.cancel();
                     }
-                }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                }).show();
 
-                    }
-                });
-                logout.create().show();
         }
         return super.onOptionsItemSelected(item);
     }
