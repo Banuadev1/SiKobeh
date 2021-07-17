@@ -63,6 +63,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         User user = list.get(position);
+        holder.deleteRl.setVisibility(View.GONE);
         holder.fullname.setText(user.getFullname());
         holder.email.setText(user.getEmail());
         holder.pnumber.setText(user.getPnumber());
