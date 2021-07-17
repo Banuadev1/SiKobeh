@@ -1,7 +1,6 @@
 package com.example.sikobeh;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -210,13 +208,13 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(),pass.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()){
                                     FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
-                                               dialog.setTitle("Terhapus!");
-                                               dialog.setContentText("Wartawan Berhasil Terhapus!")
+                                                dialog.setTitle("Terhapus!");
+                                                dialog.setContentText("Wartawan Berhasil Terhapus!")
                                                        .setConfirmText("Oke")
                                                        .setConfirmClickListener(null)
                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
@@ -225,12 +223,14 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                                             }
                                         }
                                     });
+                                    FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
                                 }
                                 else {
                                     Toasty.error(context, task.getException().getMessage(), Toast.LENGTH_LONG, true).show();
                                 }
                             }
                         });
+
                         // delete Realtime Database
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(value);
                         db.removeValue();
@@ -240,6 +240,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                             e.printStackTrace();
                         }
                         Toasty.info(context, "Memuat kembali data..", Toast.LENGTH_SHORT, true).show();
+                        list.clear();
                         notifyDataSetChanged();
                     }
                 }).setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
