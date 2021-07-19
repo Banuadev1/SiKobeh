@@ -1,6 +1,8 @@
 package com.example.sikobeh;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,13 +96,17 @@ public class WartawanForm extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                SharedPreferences sharedPreferences;
+                sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
+                int j = sharedPreferences.getInt("logged", 0);
+                if(j < 1) {
                     Toasty.info(WartawanForm.this, "Sesi Login Sudah Habis, Silahkan Login Kembali!", Toast.LENGTH_SHORT, true).show();
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(WartawanForm.this, LoginWartawan.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-
+                }
             }
 
             @Override

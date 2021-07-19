@@ -2,6 +2,7 @@ package com.example.sikobeh;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +19,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.security.MessageDigest;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import es.dmoral.toasty.Toasty;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
@@ -25,8 +31,10 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
     private TextView banner, registeruser;
     private EditText editTextfullname, editTextage, editTextemail, editTextpassword;
     private ProgressBar progressBar;
-
     private FirebaseAuth mAuth;
+
+    public static String AES = "AES";
+    public static String encryptedPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +108,14 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    try {
+                        encryptedPass = encrypt(password, "rasul19");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    String pass = encryptedPass;
                     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    User user = new User(fullname, pnumber, email, password, uid);
+                    User user = new User(fullname, pnumber, email, pass, uid);
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -127,4 +141,31 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    public static String decrypt(String data, String pass) throws Exception {
+        SecretKeySpec key = generateKey(pass);
+        Cipher c = Cipher.getInstance(AES);
+        c.init(Cipher.DECRYPT_MODE, key);
+        byte[] decodedValue = Base64.decode(data, Base64.DEFAULT);
+        byte[] decValue = c.doFinal(decodedValue);
+        String decryptedValue = new String(decValue);
+        return decryptedValue;
+    }
+
+    public String encrypt(String data, String pass) throws Exception {
+        SecretKeySpec key = generateKey(pass);
+        Cipher c = Cipher.getInstance(AES);
+        c.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encVal = c.doFinal(data.getBytes());
+        String encryptedValue = Base64.encodeToString(encVal, Base64.DEFAULT);
+        return encryptedValue;
+    }
+
+    public static SecretKeySpec generateKey(String pass) throws Exception {
+        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = pass.getBytes("UTF-8");
+        digest.update(bytes, 0, bytes.length);
+        byte[] key = digest.digest();
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+        return secretKeySpec;
+    }
 }

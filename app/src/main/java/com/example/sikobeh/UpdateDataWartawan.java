@@ -133,7 +133,7 @@ public class UpdateDataWartawan extends AppCompatActivity {
         fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> getUrl = task.getResult().toString()).addOnSuccessListener(uri -> {
                 Picasso.get().load(imageUri).into(updatePProfil);
-                Toast.makeText(UpdateDataWartawan.this, "Upload Foto Berhasil!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(UpdateDataWartawan.this, "Upload Foto Berhasil!", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
             });
         }).addOnProgressListener(snapshot -> {
