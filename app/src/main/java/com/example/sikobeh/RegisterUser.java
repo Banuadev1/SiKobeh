@@ -134,7 +134,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         }
                     });
                 }else {
-                    Toasty.error(RegisterUser.this, "Akun Gagal Terdaftar!!", Toast.LENGTH_LONG, true).show();
+                    Toasty.error(RegisterUser.this, task.getException().getMessage(), Toast.LENGTH_LONG, true).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }

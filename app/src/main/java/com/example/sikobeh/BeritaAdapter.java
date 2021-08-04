@@ -46,7 +46,8 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
         holder.loc.setText(berita.getLoc());
         holder.desc.setText(berita.getDesc());
         holder.tanggal.setText(" " + berita.getTimeupload() + " ");
-        Glide.with(holder.fotoBerita.getContext()).load(berita.getBeritaurl())
+        holder.vUrl = berita.getBeritaurl();
+        Glide.with(holder.fotoBerita.getContext()).load(holder.vUrl)
             .listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -73,6 +74,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
         ImageView fotoBerita;
         Button ubah;
         ProgressBar progressBar;
+        String vUrl;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,7 +85,8 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             desc = itemView.findViewById(R.id.descberita);
             tanggal = itemView.findViewById(R.id.tanggal);
             fotoBerita = itemView.findViewById(R.id.fotoberita);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+            progressBar = itemView.findViewById(R.id.progressBar1);
+            vUrl = null;
         }
     }
 }

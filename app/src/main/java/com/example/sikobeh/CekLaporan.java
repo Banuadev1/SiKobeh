@@ -3,7 +3,9 @@ package com.example.sikobeh;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,6 +30,7 @@ public class CekLaporan extends AppCompatActivity {
     Query database;
     WartawanAdapter wartawanAdapter;
     ArrayList<User> list;
+    TextView jikaKosong;
     Toolbar toolbar;
     Button btnHapus;
 
@@ -35,6 +41,7 @@ public class CekLaporan extends AppCompatActivity {
 
         btnHapus = findViewById(R.id.delete_btn);
         toolbar = findViewById(R.id.toolbar2);
+        jikaKosong = findViewById(R.id.idKosong1);
         recyclerView = findViewById(R.id.recview);
         database = FirebaseDatabase.getInstance().getReference("Users").orderByChild("fullname");
         recyclerView.setHasFixedSize(true);
@@ -51,6 +58,17 @@ public class CekLaporan extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    dataSnapshot.getRef().get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            jikaKosong.setVisibility(View.INVISIBLE);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            jikaKosong.setVisibility(View.VISIBLE);
+                        }
+                    });
                     User user = dataSnapshot.getValue(User.class);
                     list.add(user);
                 }
