@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -27,7 +29,9 @@ public class KoordinatorForm extends AppCompatActivity {
 
     private Button register, laporan, logout;
 
-    DatabaseReference reference;
+    private DatabaseReference reference;
+
+    String log = "Result Data = ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class KoordinatorForm extends AppCompatActivity {
         logout = findViewById(R.id.logOutKoordinator);
 
         reference = FirebaseDatabase.getInstance().getReference("DataBerita");
+        reference.keepSynced(true);
 
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +64,15 @@ public class KoordinatorForm extends AppCompatActivity {
         });
 
 
-        reference.addChildEventListener(new ChildEventListener() {
+       reference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName) {
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i(log, "Data Baru Sudah Masuk!");
                 getNotification();
             }
 
@@ -141,4 +147,35 @@ public class KoordinatorForm extends AppCompatActivity {
         managerCompat.notify(1, builder.build());
         }
     }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                getNotification();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }*/
 }

@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import es.dmoral.toasty.Toasty;
+
 public class LoginWartawan extends AppCompatActivity {
 
     private TextView forgotpassword;
@@ -90,7 +92,6 @@ public class LoginWartawan extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             return;
         }
-
         if (password1.length() < 6){
             password.setError("Password anda tidak boleh kurang dari 6 karakter");
             password.requestFocus();
@@ -111,13 +112,7 @@ public class LoginWartawan extends AppCompatActivity {
                 }
                 else
                 {
-                    task.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-                    Toast.makeText(LoginWartawan.this, "Login Error : " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toasty.error(LoginWartawan.this, "Login Error : Akun Belum Di Daftarkan!!", Toast.LENGTH_LONG, true).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }

@@ -127,6 +127,7 @@ public class UpdateDataWartawan extends AppCompatActivity {
     private void uploadDataToFirebase(Uri imageUri){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Sedang Mengganti Foto Profil..");
+        pd.setCanceledOnTouchOutside(false);
         pd.show();
         final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
                 .getUid()+"/profile.jpg");

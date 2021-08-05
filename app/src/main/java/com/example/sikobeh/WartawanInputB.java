@@ -130,7 +130,7 @@ public class WartawanInputB extends AppCompatActivity {
         pDialog.setCancelable(false);
         final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                 .setTitleText("Berhasil")
-                .setContentText("Data Berita Berhasil Di Inputkan!");
+                .setContentText("Data Berita Sudah Di Inputkan!");
         final DatabaseReference reference1 = FirebaseDatabase.getInstance()
                 .getReference("DataBerita")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();

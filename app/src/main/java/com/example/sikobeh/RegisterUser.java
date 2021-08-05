@@ -2,9 +2,13 @@ package com.example.sikobeh;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +34,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
     private TextView banner, registeruser;
     private EditText editTextfullname, editTextage, editTextemail, editTextpassword;
+    private Button kembali;
+    private CheckBox lihatPass;
+
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
 
@@ -46,6 +53,8 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         banner.setOnClickListener(this);
         registeruser = findViewById(R.id.registerUser);
         registeruser.setOnClickListener(this);
+        lihatPass = findViewById(R.id.registerlihatPassword);
+        kembali = findViewById(R.id.registerKembali);
 
         editTextfullname = findViewById(R.id.fullname);
         editTextage = findViewById(R.id.pnumber);
@@ -53,6 +62,22 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         editTextpassword = findViewById(R.id.password);
 
         progressBar = findViewById(R.id.progressbar);
+
+        kembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        lihatPass.setOnClickListener(v -> {
+            if(lihatPass.isChecked()){
+                editTextpassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            }
+            else {
+                editTextpassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
     }
 
     @Override

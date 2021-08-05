@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/view4"
-        android:background="@drawable/ic_wave"/>
+        android:background="@drawable/ic_wave_1"/>
 
     <ImageView
         android:layout_width="100dp"

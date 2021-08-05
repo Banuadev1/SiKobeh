@@ -85,18 +85,29 @@
         android:layout_below="@id/email"
         tools:ignore="MissingConstraints" />
 
+    <CheckBox
+        android:id="@+id/registerlihatPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lihat Password"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="5dp"
+        android:layout_marginLeft="100dp"
+        android:layout_below="@id/password"
+        android:layout_marginBottom="10dp"
+        android:textSize="17dp"/>
+
     <Button
         android:id="@+id/registerUser"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:layout_width="380dp"
-        android:layout_marginTop="24dp"
         android:text="DAFTAR"
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_below="@id/password"
+        android:layout_below="@id/registerlihatPassword"
         tools:ignore="MissingConstraints" />
 
     <ProgressBar
@@ -110,6 +121,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/registerKembali"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_width="380dp"
+        android:layout_marginTop="10dp"
+        android:text="Kembali"
+        android:textAllCaps="false"
+        android:textSize="26sp"
+        android:backgroundTint="#c3181e"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_below="@id/registerUser"
         tools:ignore="MissingConstraints" />
 
 </RelativeLayout>

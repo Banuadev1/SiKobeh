@@ -104,6 +104,7 @@ public class UbahDataBerita extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(UbahDataBerita.this, "Berita Berhasil Di Ubah!", Toast.LENGTH_SHORT).show();
+                        cancel.setText("Kembali");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

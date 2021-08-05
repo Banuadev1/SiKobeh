@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import es.dmoral.toasty.Toasty;
+
 public class LoginKoordinator extends AppCompatActivity {
 
     private Button loginb;
@@ -56,15 +58,14 @@ public class LoginKoordinator extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (email.getText().toString().equals("Koordinator@gmail.com")&&password.getText().toString().equals("123456789"))
         {
-            Intent i = new Intent(LoginKoordinator.this, KoordinatorForm.class);
             progressBar.setVisibility(View.GONE);
-            startActivity(i);
+            startActivity(new Intent(LoginKoordinator.this, KoordinatorForm.class));
             finish();
             editor.putInt("logged", 1);
             editor.apply();
         }
         else{
-            Toast.makeText(LoginKoordinator.this, "Login Gagal Periksa Email atau Password anda!!", Toast.LENGTH_LONG).show();
+            Toasty.error(LoginKoordinator.this, "Login Gagal Periksa Email atau Password anda!!", Toast.LENGTH_LONG, true).show();
         }
     }
 }

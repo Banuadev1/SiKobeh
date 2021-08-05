@@ -36,29 +36,29 @@
         android:textColor="@color/white"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:text="Silahkan Login"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="20sp"
-            android:text="Silahkan Login"/>
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:drawablePadding="15dp"
             android:background="@drawable/round_border"
             android:drawableStart="@drawable/ic_baseline_email_24"
             android:drawableLeft="@drawable/ic_baseline_email_24"
+            android:drawablePadding="15dp"
             android:hint="Masukan Email Anda"
             android:inputType="textEmailAddress"
             android:padding="16dp" />
@@ -67,42 +67,42 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:padding="16dp"
-            android:drawablePadding="15dp"
             android:layout_margin="20dp"
+            android:background="@drawable/round_border"
+            android:drawableStart="@drawable/ic_baseline_lock_24"
             android:drawableLeft="@drawable/ic_baseline_lock_24"
-            android:inputType="textPassword"
+            android:drawablePadding="15dp"
             android:hint="Masukan Password Anda"
-            android:drawableStart="@drawable/ic_baseline_lock_24" />
+            android:inputType="textPassword"
+            android:padding="16dp" />
 
         <CheckBox
             android:id="@+id/lihatPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lihat Password"
-            android:drawablePadding="5dp"
             android:layout_marginLeft="100dp"
             android:layout_marginBottom="20dp"
-            android:textSize="17dp"/>
+            android:drawablePadding="5dp"
+            android:text="Lihat Password"
+            android:textSize="17dp" />
 
         <Button
+            android:id="@+id/loginb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="40dp"
-            android:text="Login"
-            android:id="@+id/loginb"/>
+            android:text="Login" />
 
         <TextView
             android:id="@+id/forgotpassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Forgot Password?"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSecondary"
+            android:layout_marginLeft="0dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="0dp" />
+            android:text="Forgot Password?"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <ProgressBar
             android:id="@+id/progressbar"

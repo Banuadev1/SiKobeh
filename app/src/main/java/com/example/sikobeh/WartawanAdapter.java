@@ -282,7 +282,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
         applesQuery.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
+                if(task.isSuccessful()) {
                     applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -319,7 +319,7 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
     }
 
     private void deleteAuth(String value, String email, String pass, Dialog dialog) {
-        FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
+       // FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -327,10 +327,10 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                     FirebaseAuth.getInstance().getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
+                           // FirebaseAuth.getInstance().signOut(); // Hapus jika poin 3 kendala terpenuhi
+                            notifDeleteBerhasil();
                             Toasty.info(context, "Memuat kembali data..", Toast.LENGTH_SHORT, true).show();
                             deleteRtdb(value, dialog);
-
                         }
                     });
                     //Toasty.info(context, "1 | deleteAuth()", Toast.LENGTH_SHORT, true).show();
@@ -356,16 +356,15 @@ public class WartawanAdapter extends RecyclerView.Adapter<WartawanAdapter.MyView
                 dialog.cancel();
             }
         });
-        notifDelete();
+        notifDeleteBerhasil();
         //Toasty.info(context, "SUCCESS | deleteRtdb()", Toast.LENGTH_SHORT, true).show();
     }
 
-    private void notifDelete(){
-        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+    private void notifDeleteBerhasil(){
+        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
         dialog.setTitle("Terhapus!");
         dialog.setContentText("Wartawan Berhasil Terhapus!")
                 .setConfirmText("Oke")
-                .setConfirmClickListener(null)
-                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                .setConfirmClickListener(null);
     }
 }
