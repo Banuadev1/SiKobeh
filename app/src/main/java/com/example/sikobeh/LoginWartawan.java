@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -104,30 +106,34 @@ public class LoginWartawan extends AppCompatActivity {
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email1, password1).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful())
-                {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("password", password);
-                    String auth = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(auth);
-                    ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressBar.setVisibility(View.GONE);
-                            email.setText("");
-                            password.setText("");
-                            openafterLogin();
-                        }
-                    });
+            public void onSuccess(AuthResult authResult) {
+                try {
+                    RegisterUser.encryptedPass = RegisterUser.encrypt(password1, "rasul19");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                else
-                {
-                    Toasty.error(LoginWartawan.this, "Login Error : Akun Belum Di Daftarkan!!", Toast.LENGTH_LONG, true).show();
-                    progressBar.setVisibility(View.GONE);
-                }
+                String pass = RegisterUser.encryptedPass;
+                String auth = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Map<String, Object> map = new HashMap<>();
+                map.put("password", pass);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(auth);
+                ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
+                        email.setText("");
+                        password.setText("");
+                        openafterLogin();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toasty.error(LoginWartawan.this, "Login Error : Akun Belum Di Daftarkan!!", Toast.LENGTH_LONG, true).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

@@ -176,7 +176,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         return decryptedValue;
     }
 
-    public String encrypt(String data, String pass) throws Exception {
+    public static String encrypt(String data, String pass) throws Exception {
         SecretKeySpec key = generateKey(pass);
         Cipher c = Cipher.getInstance(AES);
         c.init(Cipher.ENCRYPT_MODE, key);

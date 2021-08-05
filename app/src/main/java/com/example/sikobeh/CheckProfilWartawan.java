@@ -126,15 +126,21 @@ public class CheckProfilWartawan extends AppCompatActivity {
             passwordResetDialog.setView(resetPassword);
 
             passwordResetDialog.setPositiveButton("Yes", (dialog, which) -> {
-                // extract the email and send reset link
                 String newPassword = resetPassword.getText().toString();
+                try {
+                    RegisterUser.encryptedPass = RegisterUser.encrypt(newPassword, "rasul19");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String pass = RegisterUser.encryptedPass;
                 Map<String, Object> map = new HashMap<>();
-                map.put("password", newPassword);
+                map.put("password", pass);
                 String auth = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(auth);
                 ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        // extract the email and send reset link
                         user.updatePassword(newPassword).addOnSuccessListener(aVoid -> Toast.makeText(CheckProfilWartawan.this, "Password Berhasil Di Ubah", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(CheckProfilWartawan.this, "Gagal Merubah Password", Toast.LENGTH_SHORT).show());
                     }
                 });
