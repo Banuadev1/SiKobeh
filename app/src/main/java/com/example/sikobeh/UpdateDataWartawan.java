@@ -89,12 +89,12 @@ public class UpdateDataWartawan extends AppCompatActivity {
         });
 
         simpan.setOnClickListener(v -> {
+            String newEmail = updateEmail.getText().toString();
             Map<String, Object> map = new HashMap<>();
             map.put("fullname", updateFName.getText().toString());
-            map.put("email", updateEmail.getText().toString());
+            map.put("email", newEmail);
             map.put("pnumber", updatePhone.getText().toString());
             map.put("imageurl", getUrl);
-            String newEmail = updateEmail.getText().toString();
             user.updateEmail(newEmail);
             FirebaseDatabase.getInstance().getReference("Users")
                     .child(reference.getKey()).updateChildren(map)
