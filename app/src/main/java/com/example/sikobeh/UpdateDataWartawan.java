@@ -32,11 +32,11 @@ import java.util.Map;
 public class UpdateDataWartawan extends AppCompatActivity {
 
     EditText updateFName, updateEmail, updatePhone;
+    Uri profilURI;
     ImageView updatePProfil;
     Button simpan, kembali;
     FirebaseAuth auth;
     String UserId;
-    String getUrl;
     FirebaseUser user;
     StorageReference storageReference;
     DatabaseReference reference;
@@ -89,7 +89,8 @@ public class UpdateDataWartawan extends AppCompatActivity {
         });
 
         simpan.setOnClickListener(v -> {
-            String newEmail = updateEmail.getText().toString();
+            uploadDataToFirebase(profilURI);
+            /*String newEmail = updateEmail.getText().toString();
             Map<String, Object> map = new HashMap<>();
             map.put("fullname", updateFName.getText().toString());
             map.put("email", newEmail);
@@ -101,7 +102,7 @@ public class UpdateDataWartawan extends AppCompatActivity {
                     .addOnSuccessListener(aVoid ->
                             Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e ->
-                            Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
+                            Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());*/
         });
 
         kembali.setOnClickListener(v -> {
@@ -115,27 +116,46 @@ public class UpdateDataWartawan extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000){
             if(resultCode == Activity.RESULT_OK){
-                Uri imageUri = data.getData();
+                profilURI = data.getData();
 
                 //profileImage.setImageURI(imageUri);
 
-                uploadDataToFirebase(imageUri);
+                updatePProfil.setImageURI(profilURI);
+
+                Picasso.get().load(profilURI).into(updatePProfil);
             }
         }
     }
 
-    private void uploadDataToFirebase(Uri imageUri){
+    private void uploadDataToFirebase(Uri Photouri){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Sedang Mengganti Foto Profil..");
         pd.setCanceledOnTouchOutside(false);
         pd.show();
+        final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
                 .getUid()+"/profile.jpg");
-        fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-            Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> getUrl = task.getResult().toString()).addOnSuccessListener(uri -> {
-                Picasso.get().load(imageUri).into(updatePProfil);
-                //Toast.makeText(UpdateDataWartawan.this, "Upload Foto Berhasil!", Toast.LENGTH_SHORT).show();
-                pd.dismiss();
+        fileRef.putFile(Photouri).addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    String getUrl = task.getResult().toString();
+                    String newEmail = updateEmail.getText().toString();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("fullname", updateFName.getText().toString());
+                    map.put("email", newEmail);
+                    map.put("pnumber", updatePhone.getText().toString());
+                    map.put("imageurl", getUrl);
+                    user.updateEmail(newEmail);
+                    FirebaseDatabase.getInstance().getReference("Users")
+                            .child(reference1.getKey()).updateChildren(map)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show();
+                                pd.dismiss();
+                            })
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
+                }
             });
         }).addOnProgressListener(snapshot -> {
             double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
