@@ -32,6 +32,7 @@ public class CekLaporan2 extends AppCompatActivity {
     ArrayList<Berita> list;
     TextView jikaKosong, ket2;
     Toolbar toolbar;
+    public static String value2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,9 @@ public class CekLaporan2 extends AppCompatActivity {
         if (WartawanAdapter.clickBerita == true) { WartawanAdapter.clickBerita = false; }
 
         String value = getIntent().getStringExtra("key");
-        String value2 = getIntent().getStringExtra("key2");
+        if (getIntent().hasExtra("key2")) {
+            value2 = getIntent().getStringExtra("key2");
+        }
         recyclerView = findViewById(R.id.recview2);
         toolbar = findViewById(R.id.toolbar2);
         jikaKosong = findViewById(R.id.idKosong);
@@ -50,7 +53,6 @@ public class CekLaporan2 extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference("DataBerita").child(value);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         setSupportActionBar(toolbar);
 

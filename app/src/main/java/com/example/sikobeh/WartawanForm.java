@@ -52,6 +52,7 @@ public class WartawanForm extends AppCompatActivity {
     DatabaseReference reference;
     FirebaseUser user;
     DataBeritaAdapter dataBeritaAdapter;
+    public static String Fname = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +121,18 @@ public class WartawanForm extends AppCompatActivity {
             }
         });
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Fname= snapshot.child("fullname").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         // TAMBAHAN DIGIT UNTUK HAPUS DATA OTOMATIS
         autoDelete();
 
@@ -127,7 +140,7 @@ public class WartawanForm extends AppCompatActivity {
                 .setQuery((Query) FirebaseDatabase.getInstance().getReference("DataBerita").child(FirebaseAuth.getInstance().getCurrentUser().getUid()), Berita.class)
                 .build();
 
-        dataBeritaAdapter = new DataBeritaAdapter(data);
+        dataBeritaAdapter = new DataBeritaAdapter(this, data);
         recyclerView.setAdapter(dataBeritaAdapter);
         recyclerView.setLayoutManager(mLayoutManager);
 
