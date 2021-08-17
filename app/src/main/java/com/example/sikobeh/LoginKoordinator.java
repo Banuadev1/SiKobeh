@@ -56,7 +56,15 @@ public class LoginKoordinator extends AppCompatActivity {
     {
         sharedPreferences = getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (email.getText().toString().equals("Koordinator@gmail.com")&&password.getText().toString().equals("123456789"))
+        if (email.getText().toString().equals("Koordinator@gmail.com")&&password.getText().toString().equals("rasul99"))
+        {
+            progressBar.setVisibility(View.GONE);
+            startActivity(new Intent(LoginKoordinator.this, KoordinatorForm.class));
+            finish();
+            editor.putInt("logged", 1);
+            editor.apply();
+        }
+        else if (email.getText().toString().equals("koordinator@gmail.com")&&password.getText().toString().equals("rasul99"))
         {
             progressBar.setVisibility(View.GONE);
             startActivity(new Intent(LoginKoordinator.this, KoordinatorForm.class));
