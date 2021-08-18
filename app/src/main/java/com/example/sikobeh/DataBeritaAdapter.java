@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -33,18 +35,22 @@ import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBeritaAdapter.MyViewHolder> {
     public static final int GALLERY_REQUEST_CODE = 105;
     Context context;
-    private File filePath = null;
+    Bitmap bitmap;
+    private File filePath = null, folder = null, gambar = null;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -52,7 +58,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
      *
      * @param options
      */
-    public DataBeritaAdapter(Context context,@NonNull FirebaseRecyclerOptions<Berita> options) {
+    public DataBeritaAdapter(Context context, @NonNull FirebaseRecyclerOptions<Berita> options) {
         super(options);
         this.context = context;
     }
@@ -101,7 +107,8 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             builder2.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "Sikobeh");
+                    bitmap = ((BitmapDrawable)holder.fotoBerita.getDrawable()).getBitmap();
+                    folder = new File(Environment.getExternalStorageDirectory() + File.separator + "Sikobeh");
                     if (!folder.exists()){
                         folder.mkdirs();
                     }
@@ -110,7 +117,8 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
                         edNamaFile.setError("Nama file harus diisi");
                     } else {
                         if (prepareDocx(str)) {
-                            String[] data = {model.getJudul(), model.getLoc(), model.getDesc(), model.getTimeupload()};
+                            getImageURL();
+                            String[] data = {model.getJudul(), model.getLoc(), model.getDesc(), model.getTimeupload(), model.getBeritaurl()};
                             createDocx(data /*, holder.fotoBerita */);
                         } else {
                             Toast.makeText(context, "Nama file sudah terpakai!", Toast.LENGTH_LONG).show();
@@ -158,13 +166,27 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
         }
     }
 
+    private void getImageURL(){
+        try {
+            OutputStream fo = new FileOutputStream(gambar);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
+            fo.flush();
+            fo.close();
+            Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
+        } catch (IOException ex) {
+            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     private Boolean prepareDocx(String str){
         // parameter_1 can switch with this : getExternalFilesDir(null) -> its gonna save to com.example.gudangsederhana
         filePath = new File(Environment.getExternalStorageDirectory()+File.separator+"Sikobeh", str+".docx");
+        gambar = new File(Environment.getExternalStorageDirectory()+File.separator+"Sikobeh", "Berita.JPEG");
 
         try {
             if (!filePath.exists()){
                 filePath.createNewFile();
+                gambar.createNewFile();
                 return true;
             } else {
                 return false;
@@ -196,7 +218,16 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             xwpfRun.setText("Judul : " + data[0]); xwpfRun.addBreak();
             xwpfRun.setText("Lokasi : " + data[1]); xwpfRun.addBreak(); // xwpfRun.addTab();
             xwpfRun.setText("Deskripsi : " + data[2]); xwpfRun.addBreak();
-            xwpfRun.setText("Waktu Penyetoran : " + data[3]); xwpfRun.addBreak(); xwpfRun.addBreak();
+            xwpfRun.setText("Waktu Penyetoran : " + data[3]); xwpfRun.addBreak();
+            FileInputStream is = new FileInputStream(gambar);
+//            byte[] bytes = new byte[4];
+//            is.read(bytes);
+//            Double width = new BigInteger(bytes).doubleValue();
+//            is.read(bytes);
+//            Double height = new BigInteger(bytes).doubleValue();
+//            Double cWidth = width/(height/300);
+            xwpfRun.addPicture(is, XWPFDocument.PICTURE_TYPE_JPEG, "berita.JPEG", Units.toEMU(300), Units.toEMU(300)); // 300x300 pixels
+            is.close();
 
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             xwpfDocument.write(fileOutputStream);
