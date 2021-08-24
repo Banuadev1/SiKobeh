@@ -38,7 +38,8 @@
 
             <ImageView
                 android:layout_height="200dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:visibility="invisible"
                 android:textAlignment="center"
@@ -115,19 +116,17 @@
             android:layout_marginTop="10dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tanggal" >
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:id="@+id/buatDokumen"
-                android:gravity="right"
-                android:text="Buat Dokumen"
-                android:drawableLeft="@drawable/ic_baseline_file_copy_24"
+                android:id="@+id/pilihan"
+                android:src="@drawable/ic_baseline_more_horiz_24"
                 android:backgroundTint="#31bd59" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:id="@+id/ubahBerita"
-                android:layout_toRightOf="@id/buatDokumen"
+                android:layout_toRightOf="@id/pilihan"
                 android:layout_marginLeft="10dp"
                 android:text="Ubah"
                 android:backgroundTint="#c3181e" />
