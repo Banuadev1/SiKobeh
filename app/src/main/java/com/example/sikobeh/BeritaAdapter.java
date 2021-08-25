@@ -35,13 +35,14 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -52,7 +53,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
     Bitmap bitmap;
     private SharedPreferences phoneNumber;
     private File filePath = null, folder = null, gambar = null;
-    String auth = FirebaseAuth.getInstance().getCurrentUser().getUid(), catchError;;
+    String catchError;;
 
     public BeritaAdapter(Context context, ArrayList<Berita> list) {
         this.context = context;
@@ -120,7 +121,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
                     if (folder.mkdirs()){
                         simpanFileText(data, holder.li);
                     } else {
-                        Toast.makeText(context, "Terjadi kesalahan saat membuat folder Sikobeh", Toast.LENGTH_SHORT).show();
+                        Toasty.error(context, "Terjadi kesalahan saat membuat folder Sikobeh", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
                     simpanFileText(data, holder.li);
@@ -199,7 +200,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
         builder2.setTitle("Masukkan nomor telepon Anda");
 
         EditText edNP = customLayout2.findViewById(R.id.edNomorTelp);
-        String phone = phoneNumber.getString(auth, "false");
+        String phone = phoneNumber.getString("koor", "false");
         if (!phone.equals("false")){
             edNP.setText(phone);
         }
@@ -207,7 +208,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String data = edNP.getText().toString();
-                phoneNumber.edit().putString(auth, data).apply();
+                phoneNumber.edit().putString("koor", data).apply();
                 if (!data.isEmpty()){
                     if (cekWAInstalled()){
                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
@@ -216,10 +217,10 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
                         context.startActivity(i);
                         edNP.getText().clear();
                     } else {
-                        Toast.makeText(context, "Whatsapp tidak terinstal", Toast.LENGTH_SHORT).show();
+                        Toasty.info(context, "Whatsapp tidak terinstal", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
-                    Toast.makeText(context, "Masukkan nomor telepon terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    Toasty.error(context, "Masukkan nomor telepon terlebih dahulu", Toast.LENGTH_SHORT, true).show();
                 }
             }
         });
@@ -275,11 +276,11 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
                     if (prepareFolder(edT)){
                         writeFile(data);
                     } else {
-                        //Toast.makeText(context, catchError, Toast.LENGTH_LONG).show();
-                        Toast.makeText(context, "Terjadi kesalahan saat penentuan penyimpanan", Toast.LENGTH_SHORT).show();
+                        //Toasty.error(context, catchError, Toast.LENGTH_LONG).show();
+                        Toasty.error(context, "Terjadi kesalahan saat penentuan penyimpanan", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
-                    Toast.makeText(context, "Terjadi kesalahan saat membuat penyimpanan File Text", Toast.LENGTH_SHORT).show();
+                    Toasty.error(context, "Terjadi kesalahan saat membuat penyimpanan File Text", Toast.LENGTH_SHORT, true).show();
                 }
             }
         });
@@ -310,7 +311,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             fos.close();
             simpanFoto();
         } catch (IOException e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+            Toasty.error(context, e.toString(), Toast.LENGTH_SHORT, true).show();
         }
     }
 
@@ -320,9 +321,9 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHold
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
             fo.flush();
             fo.close();
-            Toast.makeText(context, "File tersimpan di "+folder.toString(), Toast.LENGTH_SHORT).show();
+            Toasty.error(context, "File tersimpan di "+folder.toString(), Toast.LENGTH_SHORT, true).show();
         } catch (IOException ex) {
-            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toasty.error(context, ex.getMessage(), Toast.LENGTH_LONG, true).show();
         }
     }
 

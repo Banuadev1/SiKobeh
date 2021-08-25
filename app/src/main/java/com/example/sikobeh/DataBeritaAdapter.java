@@ -44,9 +44,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBeritaAdapter.MyViewHolder> {
     public static final int GALLERY_REQUEST_CODE = 105;
@@ -128,7 +128,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
                     if (folder.mkdirs()){
                         simpanFileText(data, holder.li);
                     } else {
-                        Toast.makeText(context, "Terjadi kesalahan saat membuat folder Sikobeh", Toast.LENGTH_SHORT).show();
+                        Toasty.error(context, "Terjadi kesalahan saat membuat folder Sikobeh", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
                     simpanFileText(data, holder.li);
@@ -282,11 +282,11 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
                     if (prepareFolder(edT)){
                         writeFile(data);
                     } else {
-                        //Toast.makeText(context, catchError, Toast.LENGTH_LONG).show();
-                        Toast.makeText(context, "Terjadi kesalahan saat penentuan penyimpanan", Toast.LENGTH_SHORT).show();
+                        //Toasty.error(context, catchError, Toast.LENGTH_LONG).show();
+                        Toasty.error(context, "Terjadi kesalahan saat penentuan penyimpanan", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
-                    Toast.makeText(context, "Terjadi kesalahan saat membuat penyimpanan File Text", Toast.LENGTH_SHORT).show();
+                    Toasty.error(context, "Terjadi kesalahan saat membuat penyimpanan File Text", Toast.LENGTH_SHORT, true).show();
                 }
             }
         });
@@ -317,7 +317,7 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             fos.close();
             simpanFoto();
         } catch (IOException e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+            Toasty.error(context, e.toString(), Toast.LENGTH_SHORT, true).show();
         }
     }
 
@@ -327,9 +327,9 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
             fo.flush();
             fo.close();
-            Toast.makeText(context, "File tersimpan di "+folder.toString(), Toast.LENGTH_SHORT).show();
+            Toasty.info(context, "File tersimpan di "+folder.toString(), Toast.LENGTH_SHORT, true).show();
         } catch (IOException ex) {
-            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toasty.error(context, ex.getMessage(), Toast.LENGTH_SHORT, true).show();
         }
     }
 
