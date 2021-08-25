@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import static android.content.Context.MODE_PRIVATE;
 
 public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.MyViewHolder> {
-
+    // Semoga teada Bug yg meresahkan, Amin
     Context context;
     ArrayList<Berita> list;
     Bitmap bitmap;
