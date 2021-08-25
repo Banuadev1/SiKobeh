@@ -46,6 +46,8 @@ import java.io.OutputStream;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import es.dmoral.toasty.Toasty;
+
 public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBeritaAdapter.MyViewHolder> {
     public static final int GALLERY_REQUEST_CODE = 105;
     Context context;
@@ -221,10 +223,10 @@ public class DataBeritaAdapter extends FirebaseRecyclerAdapter<Berita, DataBerit
                         context.startActivity(i);
                         edNP.getText().clear();
                     } else {
-                        Toast.makeText(context, "Whatsapp tidak terinstal", Toast.LENGTH_SHORT).show();
+                        Toasty.info(context, "Whatsapp Belum terinstal!!", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
-                    Toast.makeText(context, "Masukkan nomor telepon terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    Toasty.error(context, "Masukkan nomor telepon terlebih dahulu!!!", Toast.LENGTH_SHORT, true).show();
                 }
             }
         });

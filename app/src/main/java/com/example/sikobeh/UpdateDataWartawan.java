@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +30,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 public class UpdateDataWartawan extends AppCompatActivity {
 
@@ -116,7 +120,10 @@ public class UpdateDataWartawan extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000){
             if(resultCode == Activity.RESULT_OK){
-                profilURI = data.getData();
+
+                if(data != null){
+                    profilURI = data.getData();
+                }
 
                 //profileImage.setImageURI(imageUri);
 
@@ -136,34 +143,52 @@ public class UpdateDataWartawan extends AppCompatActivity {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         final StorageReference fileRef = storageReference.child("users/"+auth.getCurrentUser()
                 .getUid()+"/profile.jpg");
-        fileRef.putFile(Photouri).addOnSuccessListener(taskSnapshot -> {
-            Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    String getUrl = task.getResult().toString();
-                    String newEmail = updateEmail.getText().toString();
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("fullname", updateFName.getText().toString());
-                    map.put("email", newEmail);
-                    map.put("pnumber", updatePhone.getText().toString());
-                    map.put("imageurl", getUrl);
-                    user.updateEmail(newEmail);
-                    FirebaseDatabase.getInstance().getReference("Users")
-                            .child(reference1.getKey()).updateChildren(map)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT).show();
-                                pd.dismiss();
-                            })
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
+        if (profilURI != null){
+            fileRef.putFile(Photouri).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        String getUrl = task.getResult().toString();
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("imageurl", getUrl);
+                        FirebaseDatabase.getInstance().getReference("Users")
+                                .child(reference1.getKey()).updateChildren(map)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toasty.success(UpdateDataWartawan.this, "Data Berhasil Di Ubah", Toast.LENGTH_SHORT, true).show();
+                                    pd.dismiss();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show());
+                    }
+                });
+            }).addOnProgressListener(snapshot -> {
+                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                pd.setMessage("Mohon Tunggu.." + (int) progressPercent + "%");
+            })
+                    .addOnFailureListener(e -> {
+                        Toasty.error(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT, true).show();
+                    });
+        }else{
+            String newEmail = updateEmail.getText().toString();
+            Map<String, Object> map = new HashMap<>();
+            map.put("fullname", updateFName.getText().toString());
+            map.put("email", newEmail);
+            map.put("pnumber", updatePhone.getText().toString());
+            user.updateEmail(newEmail);
+            FirebaseDatabase.getInstance().getReference("Users")
+                    .child(reference1.getKey()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    pd.dismiss();
+                    Toasty.success(UpdateDataWartawan.this, "Data Sudah Tersimpan!", Toast.LENGTH_SHORT, true).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toasty.error(UpdateDataWartawan.this, "Terdapat Kesalahan!!!", Toast.LENGTH_SHORT, true).show();
                 }
             });
-        }).addOnProgressListener(snapshot -> {
-            double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-            pd.setMessage("Mohon Tunggu.." + (int) progressPercent + "%");
-        })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(UpdateDataWartawan.this, "Terdapat Kesalahan!!", Toast.LENGTH_SHORT).show();
-                });
+        }
+
     }
 
     @Override
