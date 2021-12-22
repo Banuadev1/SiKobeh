@@ -1,6 +1,7 @@
 # SiKobeh
 Develop by :
-Digit Marsshal Assah (Project Owner)
+Digit Marsshal Assah
+Dirga Sumayudha
 Farnly Stefan Cungaliwa
 Fahrul Umar
 Muhammad Rizki Budiman
